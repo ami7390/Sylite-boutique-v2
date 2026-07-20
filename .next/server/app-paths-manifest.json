@@ -1,0 +1,20 @@
+{
+  "/(boutique)/admin/page": "app/(boutique)/admin/page.js",
+  "/(boutique)/collection/page": "app/(boutique)/collection/page.js",
+  "/(boutique)/contact/page": "app/(boutique)/contact/page.js",
+  "/(boutique)/dashboard/addresses/page": "app/(boutique)/dashboard/addresses/page.js",
+  "/(boutique)/dashboard/invoices/page": "app/(boutique)/dashboard/invoices/page.js",
+  "/(boutique)/dashboard/orders/page": "app/(boutique)/dashboard/orders/page.js",
+  "/(boutique)/dashboard/wishlist/page": "app/(boutique)/dashboard/wishlist/page.js",
+  "/(boutique)/electromenager/[id]/page": "app/(boutique)/electromenager/[id]/page.js",
+  "/(boutique)/electromenager/page": "app/(boutique)/electromenager/page.js",
+  "/(boutique)/nouvel-arrivage/page": "app/(boutique)/nouvel-arrivage/page.js",
+  "/(boutique)/options-db/page": "app/(boutique)/options-db/page.js",
+  "/(boutique)/options/page": "app/(boutique)/options/page.js",
+  "/(boutique)/page": "app/(boutique)/page.js",
+  "/(boutique)/soins/page": "app/(boutique)/soins/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/maintenance/page": "app/maintenance/page.js"
+}

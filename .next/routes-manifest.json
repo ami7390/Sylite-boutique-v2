@@ -1,0 +1,156 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "onMatchHeaders": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/electromenager/[id]",
+      "regex": "^/electromenager/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/electromenager/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/collection",
+      "regex": "^/collection(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/collection(?:/)?$"
+    },
+    {
+      "page": "/contact",
+      "regex": "^/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/contact(?:/)?$"
+    },
+    {
+      "page": "/dashboard/addresses",
+      "regex": "^/dashboard/addresses(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/addresses(?:/)?$"
+    },
+    {
+      "page": "/dashboard/invoices",
+      "regex": "^/dashboard/invoices(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/invoices(?:/)?$"
+    },
+    {
+      "page": "/dashboard/orders",
+      "regex": "^/dashboard/orders(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/orders(?:/)?$"
+    },
+    {
+      "page": "/dashboard/wishlist",
+      "regex": "^/dashboard/wishlist(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/wishlist(?:/)?$"
+    },
+    {
+      "page": "/electromenager",
+      "regex": "^/electromenager(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/electromenager(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/maintenance",
+      "regex": "^/maintenance(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/maintenance(?:/)?$"
+    },
+    {
+      "page": "/nouvel-arrivage",
+      "regex": "^/nouvel\\-arrivage(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/nouvel\\-arrivage(?:/)?$"
+    },
+    {
+      "page": "/options",
+      "regex": "^/options(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/options(?:/)?$"
+    },
+    {
+      "page": "/options-db",
+      "regex": "^/options\\-db(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/options\\-db(?:/)?$"
+    },
+    {
+      "page": "/soins",
+      "regex": "^/soins(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/soins(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

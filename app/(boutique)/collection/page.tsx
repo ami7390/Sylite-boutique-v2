@@ -3,7 +3,6 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 // Importation du client Supabase branché sur ton espace Admin
 import { supabase } from '@/lib/supabaseclient';
 import { subscribeToProductChanges } from '@/lib/product-sync';
@@ -39,8 +38,6 @@ interface DbProduct {
 }
 
 export default function CollectionPage() {
-  const pathname = usePathname();
-  const isCarePage = pathname === "/soins";
   // =========================================================================
   // ÉTATS DE NAVIGATION, FILTRES ET AFFICHAGE
   // =========================================================================
@@ -165,9 +162,7 @@ export default function CollectionPage() {
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...normalizedCatalog];
 
-    if (isCarePage) {
-      result = result.filter(p => p.category === "Soin et méditation");
-    } else if (selectedCategory !== "Tous") {
+    if (selectedCategory !== "Tous") {
       result = result.filter(p => p.category === selectedCategory);
     }
 
@@ -192,7 +187,7 @@ export default function CollectionPage() {
     }
 
     return result;
-  }, [normalizedCatalog, selectedCategory, priceFilter, stockFilter, sortBy, isCarePage]);
+  }, [normalizedCatalog, selectedCategory, priceFilter, stockFilter, sortBy]);
 
   if (!isMounted) {
     return <div className="bg-neutral-50/60 min-h-screen animate-pulse" />;
@@ -216,15 +211,13 @@ export default function CollectionPage() {
 
         <div className="max-w-3xl mx-auto relative z-10 text-center space-y-4">
           <span className="text-[10px] font-bold tracking-widest text-purple-400 uppercase bg-purple-500/10 px-3.5 py-1.5 rounded-full border border-purple-500/20 inline-block">
-            {isCarePage ? "Bien-être & Soins" : "Vestiaire Iconique & Soins"}
+            Vestiaire Iconique & Soins
           </span>
           <h1 className="text-4xl sm:text-6xl font-serif tracking-wide text-white font-light">
-            {isCarePage ? "Soins" : "Le Catalogue Permanent"}
+            Le Catalogue Permanent
           </h1>
           <p className="text-xs sm:text-sm text-neutral-300 font-light max-w-xl mx-auto leading-relaxed">
-            {isCarePage
-              ? "Découvrez tous nos produits de soins et de bien-être, réunis dans un espace spécialement conçu pour prendre soin de vous."
-              : "Parcourez notre vestiaire premium : des silhouettes fluides, de la lingerie de nuit délicate, des gaines amincissantes invisibles et des indispensables bien-être conçus pour sublimer votre quotidien."}
+            Parcourez notre vestiaire premium : des silhouettes fluides, de la lingerie de nuit délicate, des gaines amincissantes invisibles et des indispensables bien-être conçus pour sublimer votre quotidien.
           </p>
         </div>
       </header>
@@ -380,7 +373,7 @@ export default function CollectionPage() {
                         
                         {/* LIEN DYNAMIQUE UNIQUE VERS OPTIONS-DB OU OPTIONS */}
                         <Link 
-                          href={`/options?id=${product.originalId}`} 
+                          href={String(product.id).startsWith('db-') ? `/options-db?id=${product.originalId}` : `/options?id=${product.originalId}`} 
                           className="inline-flex justify-center items-center px-3 py-1.5 text-[10px] sm:text-xs font-semibold rounded-lg bg-neutral-950 text-white hover:bg-purple-600 transition-all shadow-sm z-10 relative"
                         >
                           Options
@@ -501,7 +494,7 @@ export default function CollectionPage() {
                   
                   {/* LIEN DYNAMIQUE UNIQUE SÉCURISÉ POUR LES RECOMMANDATIONS */}
                   <Link 
-                    href={`/options?id=${product.originalId}`} 
+                    href={String(product.id).startsWith('db-') ? `/options-db?id=${product.originalId}` : `/options?id=${product.originalId}`} 
                     className="text-[10px] font-bold text-purple-600 bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-md transition-all cursor-pointer z-10 relative"
                   >
                     Voir ›

@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(boutique)/layout,_N_T_/(boutique)/dashboard/layout,_N_T_/(boutique)/dashboard/orders/layout,_N_T_/(boutique)/dashboard/orders/page,_N_T_/dashboard/orders"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGJvdXRpcXVlKQ/dashboard/orders/__PAGE__",
+    "/!KGJvdXRpcXVlKQ/dashboard/orders",
+    "/!KGJvdXRpcXVlKQ/dashboard",
+    "/!KGJvdXRpcXVlKQ",
+    "/_index",
+    "/_head"
+  ]
+}

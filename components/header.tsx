@@ -54,7 +54,6 @@ export default function Header() {
     { name: "Accueil", href: "/" },
     { name: "Nouvel Arrivage", href: "/nouvel-arrivage" },
     { name: "Collection", href: "/collection" },
-    { name: "Soins", href: "/soins" },
     { name: "Contact", href: "/contact" },
   ];
 

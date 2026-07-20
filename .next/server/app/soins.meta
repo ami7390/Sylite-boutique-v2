@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(boutique)/layout,_N_T_/(boutique)/soins/layout,_N_T_/(boutique)/soins/page,_N_T_/soins"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGJvdXRpcXVlKQ/soins/__PAGE__",
+    "/!KGJvdXRpcXVlKQ/soins",
+    "/!KGJvdXRpcXVlKQ",
+    "/_index",
+    "/_head"
+  ]
+}
