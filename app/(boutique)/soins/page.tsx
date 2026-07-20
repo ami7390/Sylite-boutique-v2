@@ -2,8 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { ArrowDown, HeartPulse, MessageCircle, Sparkles } from "lucide-react";
 import { supabase } from "@/lib/supabaseclient";
 import { subscribeToProductChanges } from "@/lib/product-sync";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface CareProduct {
   id: number | string;
@@ -58,6 +63,12 @@ export default function SoinsPage() {
     [products]
   );
 
+  const benefits = [
+    { icon: Sparkles, title: "Sélection experte", text: "Des essentiels choisis avec soin" },
+    { icon: HeartPulse, title: "Bien-être au quotidien", text: "Pour le corps et l'esprit" },
+    { icon: MessageCircle, title: "Commande directe", text: "Accompagnement personnalisé sur WhatsApp" },
+  ];
+
   const orderOnWhatsApp = (product: CareProduct) => {
     const message = [
       "Bonjour SYLITE !",
@@ -92,24 +103,17 @@ export default function SoinsPage() {
           <p className="mx-auto mt-6 max-w-2xl text-sm font-light leading-7 text-neutral-300 sm:text-base">
             Une sélection pensée pour prendre soin du corps, apaiser l&apos;esprit et transformer chaque instant en un véritable rituel de bien-être.
           </p>
-          <a
-            href="#produits-soins"
-            className="mt-8 inline-flex items-center rounded-full bg-white px-6 py-3 text-xs font-bold text-neutral-950 transition hover:bg-purple-500 hover:text-white"
-          >
-            Découvrir la sélection <span className="ml-2">↓</span>
-          </a>
+          <Button asChild variant="outline" className="mt-8 rounded-full border-white bg-white px-6 text-xs font-bold text-neutral-950 hover:border-purple-500 hover:bg-purple-500 hover:text-white">
+            <a href="#produits-soins">Découvrir la sélection <ArrowDown className="size-4" /></a>
+          </Button>
         </div>
       </header>
 
       <section className="border-b border-neutral-200 bg-white">
         <div className="mx-auto grid max-w-7xl grid-cols-1 divide-y divide-neutral-200 px-4 sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-6 lg:px-8">
-          {[
-            ["✦", "Sélection experte", "Des essentiels choisis avec soin"],
-            ["♡", "Bien-être au quotidien", "Pour le corps et l'esprit"],
-            ["◉", "Commande directe", "Accompagnement personnalisé sur WhatsApp"],
-          ].map(([icon, title, text]) => (
+          {benefits.map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex items-center gap-4 px-5 py-6">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-50 text-purple-600">{icon}</span>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-50 text-purple-600"><Icon className="size-5" strokeWidth={1.8} /></span>
               <div>
                 <p className="text-xs font-bold text-neutral-900">{title}</p>
                 <p className="mt-1 text-[11px] text-neutral-500">{text}</p>
@@ -131,7 +135,7 @@ export default function SoinsPage() {
         {loading ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {Array.from({ length: 8 }).map((_, index) => (
-              <div key={index} className="h-[470px] animate-pulse rounded-2xl bg-white shadow-sm" />
+              <Skeleton key={index} className="h-[470px] rounded-2xl bg-white shadow-sm" />
             ))}
           </div>
         ) : careProducts.length === 0 ? (
@@ -147,7 +151,7 @@ export default function SoinsPage() {
               const label = product.badge || product.tag;
 
               return (
-                <article key={product.id} className="group flex overflow-hidden rounded-2xl border border-neutral-200/80 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <Card key={product.id} className="group flex overflow-hidden transition duration-300 hover:-translate-y-1 hover:shadow-xl">
                   <div className="flex w-full flex-col">
                     <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100">
                       <Image
@@ -160,31 +164,32 @@ export default function SoinsPage() {
                       />
                       <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
                       {label && (
-                        <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider text-neutral-900 shadow-sm">
+                        <Badge variant="secondary" className="absolute left-4 top-4 bg-white/95 text-neutral-900 shadow-sm">
                           {label}
-                        </span>
+                        </Badge>
                       )}
-                      <span className={`absolute bottom-4 left-4 rounded-full px-3 py-1.5 text-[9px] font-bold ${product.in_stock === false ? "bg-neutral-900 text-white" : "bg-emerald-500 text-white"}`}>
+                      <Badge variant={product.in_stock === false ? "secondary" : "success"} className={`absolute bottom-4 left-4 ${product.in_stock === false ? "bg-neutral-900 text-white" : ""}`}>
                         {product.in_stock === false ? "Indisponible" : "Disponible"}
-                      </span>
+                      </Badge>
                     </div>
 
                     <div className="flex flex-1 flex-col p-5">
                       <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-purple-600">{product.category}</p>
                       <h3 className="mt-2 min-h-12 text-sm font-semibold leading-6 text-neutral-900">{product.name}</h3>
                       <p className="mt-4 text-lg font-bold text-neutral-950">{formatPrice(product.price)}</p>
-                      <button
+                      <Button
                         type="button"
+                        variant="whatsapp"
                         disabled={product.in_stock === false}
                         onClick={() => orderOnWhatsApp(product)}
-                        className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#1fb85a] hover:shadow-md disabled:cursor-not-allowed disabled:bg-neutral-300"
+                        className="mt-5 w-full text-xs font-bold shadow-sm hover:shadow-md disabled:bg-neutral-300"
                       >
-                        <span aria-hidden="true">◉</span>
+                        <MessageCircle className="size-4" />
                         {product.in_stock === false ? "Produit indisponible" : "Commander sur WhatsApp"}
-                      </button>
+                      </Button>
                     </div>
                   </div>
-                </article>
+                </Card>
               );
             })}
           </div>

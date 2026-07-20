@@ -5,6 +5,9 @@ import { useState } from 'react';
 import Image from 'next/image'; 
 import Link from 'next/link'; // Importation de Link pour de meilleures performances de navigation
 import { usePathname } from 'next/navigation'; // Hook pour récupérer l'URL actuelle
+import { Menu, Search, ShoppingBag, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 // IMPORTATION : On écoute les données de notre panier global
 import { useCart } from '../app/(boutique)/context/cartcontext';
@@ -50,13 +53,13 @@ export default function Header() {
   };
 
   // Liste centralisée des onglets pour automatiser l'activation des styles
- const navLinks = [
-  { name: "Accueil", href: "/" },
-  { name: "Nouvel Arrivage", href: "/nouvel-arrivage" },
-  { name: "Collection", href: "/collection" },
-  { name: "Soins", href: "/soins" },
-  { name: "Contact", href: "/contact" },
-];
+  const navLinks = [
+    { name: "Accueil", href: "/" },
+    { name: "Nouvel Arrivage", href: "/nouvel-arrivage" },
+    { name: "Collection", href: "/collection" },
+    { name: "Soins", href: "/soins" },
+    { name: "Contact", href: "/contact" },
+  ];
 
   return (
     <nav className="bg-white border-b border-neutral-100 sticky top-0 z-50">
@@ -69,8 +72,9 @@ export default function Header() {
               <Image 
                 src="/logo.png" 
                 alt="SYLITE Logo"
-                layout="fill"
-                objectFit="contain" 
+                fill
+                sizes="128px"
+                className="object-contain"
                 priority
               />
             </Link>
@@ -99,30 +103,33 @@ export default function Header() {
           {/* Barre de Recherche et Utilitaires (Desktop) */}
           <div className="hidden md:flex items-center space-x-4">
             <div className="relative">
-              <input
+              <Input
                 type="text"
                 placeholder="Rechercher une pièce..."
-                className="bg-neutral-50 border border-neutral-200 text-xs rounded-full pl-4 pr-10 py-2 w-48 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 text-neutral-800 transition-all"
+                className="h-9 w-48 rounded-full pl-4 pr-10 text-xs"
               />
-              <span className="absolute right-3 top-2 text-neutral-400 text-sm">🔍</span>
+              <Search aria-hidden="true" className="absolute right-3 top-2.5 size-4 text-neutral-400" strokeWidth={1.8} />
             </div>
             
             {/* COMPOSANT USER MENU INTÉGRÉ ICI (REMPLACE L'ANCIENNE ICÔNE STATIQUE) */}
             <UserMenu />
             
             {/* BOUTON PANIER MODIFIÉ */}
-            <button 
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
               onClick={handleSendWhatsAppOrder}
-              className="p-1 text-neutral-600 hover:text-purple-600 transition-colors text-lg relative" 
+              className="relative text-neutral-600"
               aria-label="Panier"
             >
-              👜
+              <ShoppingBag aria-hidden="true" className="size-5" strokeWidth={1.8} />
               {totalArticles > 0 && (
                 <span className="absolute -top-1 -right-1 bg-purple-600 text-white rounded-full text-[9px] w-4 h-4 flex items-center justify-center font-bold animate-pulse">
                   {totalArticles}
                 </span>
               )}
-            </button>
+            </Button>
           </div>
 
           {/* Barre d'utilitaires et Menu Mobile */}
@@ -132,26 +139,32 @@ export default function Header() {
             <UserMenu />
 
             {/* PANIER RAPIDE VISIBLE SUR MOBILE À CÔTÉ DU CHEVRON */}
-            <button 
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
               onClick={handleSendWhatsAppOrder}
-              className="p-1 text-neutral-600 hover:text-purple-600 transition-colors text-lg relative" 
+              className="relative text-neutral-600"
               aria-label="Panier"
             >
-              👜
+              <ShoppingBag aria-hidden="true" className="size-5" strokeWidth={1.8} />
               {totalArticles > 0 && (
                 <span className="absolute -top-1 -right-1 bg-purple-600 text-white rounded-full text-[9px] w-4 h-4 flex items-center justify-center font-bold">
                   {totalArticles}
                 </span>
               )}
-            </button>
+            </Button>
 
-            <button
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
               onClick={() => setIsOpen(!isOpen)}
-              className="text-neutral-600 hover:text-purple-600 focus:outline-none p-2 text-xl"
+              className="text-neutral-600"
               aria-label="Toggle menu"
             >
-              {isOpen ? '✕' : '☰'}
-            </button>
+              {isOpen ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
+            </Button>
           </div>
 
         </div>
@@ -179,12 +192,12 @@ export default function Header() {
           })}
           
           <div className="pt-4 px-3 relative">
-            <input
+            <Input
               type="text"
               placeholder="Rechercher..."
-              className="w-full bg-neutral-50 border border-neutral-200 text-xs rounded-full pl-4 pr-10 py-2.5 focus:outline-none focus:border-purple-400 text-neutral-800"
+              className="w-full rounded-full pl-4 pr-10 text-xs"
             />
-            <span className="absolute right-6 top-6 text-neutral-400 text-sm">🔍</span>
+            <Search aria-hidden="true" className="absolute right-6 top-6 size-4 text-neutral-400" strokeWidth={1.8} />
           </div>
         </div>
       )}

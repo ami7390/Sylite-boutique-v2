@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { Sparkles } from 'lucide-react';
 
 export default function Maintenance() {
   // Configurer le numéro WhatsApp au format international (Ex: +223...)
@@ -106,7 +107,7 @@ export default function Maintenance() {
             </form>
           ) : (
             <div className="py-4 space-y-2 animate-fadeIn">
-              <span className="text-purple-400 text-lg block">✨</span>
+              <Sparkles className="h-5 w-5 text-purple-400 mx-auto" />
               <h4 className="text-sm font-medium text-white tracking-wide">Demande enregistrée</h4>
               <p className="text-xs text-neutral-500 font-light max-w-xs mx-auto">
                 Vous ferez partie des premiers informés du retour en ligne du studio.

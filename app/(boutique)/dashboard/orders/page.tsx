@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import { ShoppingBag } from 'lucide-react';
 
 export default function OrdersPage() {
   // Données simulées pour une commande haut de gamme
@@ -35,7 +36,7 @@ export default function OrdersPage() {
 
         {orders.length === 0 ? (
           <div className="bg-white border border-neutral-200/60 rounded-3xl p-12 text-center space-y-3 shadow-sm">
-            <span className="text-2xl block">🛍️</span>
+            <ShoppingBag className="h-6 w-6 mx-auto text-purple-600" />
             <p className="text-neutral-500 font-light text-[13px]">Vous n'avez pas encore passé de commande.</p>
             <Link href="/collection" className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold uppercase tracking-wider px-6 py-3 rounded-xl transition-all">
               Découvrir la collection

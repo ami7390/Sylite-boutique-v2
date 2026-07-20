@@ -3,9 +3,13 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Bolt, Handshake, Heart, MessageCircle, Package, Search, ShoppingBag, SlidersHorizontal, TrendingUp } from 'lucide-react';
 // Importation du client Supabase branché sur ton espace Admin
 import { supabase } from '@/lib/supabaseclient';
 import { subscribeToProductChanges } from '@/lib/product-sync';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Interface produit standardisée
 interface Product {
@@ -226,14 +230,17 @@ export default function CollectionPage() {
       <section className="bg-white border-y border-neutral-200/80 sticky top-0 z-30 shadow-sm backdrop-blur-md bg-white/95">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between text-xs">
           <div className="flex items-center gap-4">
-            <button 
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
               onClick={() => setIsMobileFilterOpen(true)}
-              className="lg:hidden flex items-center gap-2 font-bold text-neutral-800 border border-neutral-200 px-3 py-1.5 rounded-lg active:bg-neutral-50"
+              className="lg:hidden font-bold"
             >
-              <span>🎛️</span> Filtrer et Trier
-            </button>
+              <SlidersHorizontal className="size-4" /> Filtrer et Trier
+            </Button>
             <div className="hidden lg:flex items-center gap-1.5 text-neutral-500 font-medium">
-              <span>📊</span> <span className="text-neutral-800 font-bold">{filteredAndSortedProducts.length}</span> modèles trouvés
+              <TrendingUp className="size-4" /> <span className="text-neutral-800 font-bold">{filteredAndSortedProducts.length}</span> modèles trouvés
             </div>
           </div>
 
@@ -319,12 +326,10 @@ export default function CollectionPage() {
           {/* LA GRILLE DE PRODUITS */}
           <div className="flex-grow">
             {loading ? (
-              <div className="text-center py-20 text-neutral-400 text-xs animate-pulse">
-                Chargement du catalogue en direct...
-              </div>
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3">{Array.from({ length: 6 }).map((_, index) => <Skeleton key={index} className="h-[430px]" />)}</div>
             ) : filteredAndSortedProducts.length === 0 ? (
               <div className="bg-white rounded-2xl border border-neutral-200/60 p-16 text-center max-w-xl mx-auto my-10 space-y-4">
-                <div className="text-3xl">🔍</div>
+                <Search className="mx-auto size-8 text-purple-600" />
                 <h3 className="text-base font-bold text-neutral-800">Aucun modèle ne correspond à vos filtres</h3>
                 <button onClick={() => { setSelectedCategory("Tous"); setPriceFilter("Tous"); setStockFilter(false); }} className="px-4 py-2 bg-neutral-950 text-white rounded-xl text-xs font-semibold hover:bg-neutral-800 transition-colors">
                   Réinitialiser les filtres
@@ -339,7 +344,7 @@ export default function CollectionPage() {
                       onClick={() => toggleLike(String(product.id))}
                       className="absolute top-2.5 right-2.5 z-20 bg-white/80 backdrop-blur-sm p-1.5 rounded-full shadow-sm hover:bg-white transition-all text-xs"
                     >
-                      {likedProducts.includes(String(product.id)) ? "❤️" : "🤍"}
+                      <Heart className={`size-4 ${likedProducts.includes(String(product.id)) ? "fill-red-500 text-red-500" : "text-neutral-600"}`} />
                     </button>
 
                     {!product.inStock && (
@@ -408,9 +413,7 @@ export default function CollectionPage() {
               Ne cherchez plus les associations parfaites. Nos stylistes ont assemblé l'élégance intemporelle de nos ensembles raffinés avec la fluidité et le tombé soyeux de nos foulards premium.
             </p>
             <div className="pt-2">
-              <a href="https://wa.me/22394939380?text=Bonjour%20Sylite,%20je%20souhaite%20commander%20le%20look%20complet%20Ensemble%20Chic%20%2B%20Foulard%20en%20Soie." target="_blank" rel="noopener noreferrer" className="inline-flex py-3 px-6 bg-purple-600 hover:bg-purple-500 text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md">
-                🛍️ Réserver le Look Complet
-              </a>
+              <Button asChild variant="purple" className="text-xs font-bold uppercase tracking-wider shadow-md"><a href="https://wa.me/22394939380?text=Bonjour%20Sylite,%20je%20souhaite%20commander%20le%20look%20complet%20Ensemble%20Chic%20%2B%20Foulard%20en%20Soie." target="_blank" rel="noopener noreferrer"><ShoppingBag className="size-4" /> Réserver le Look Complet</a></Button>
             </div>
           </div>
           <div className="lg:col-span-7 grid grid-cols-2 gap-4">
@@ -468,7 +471,7 @@ export default function CollectionPage() {
                   onClick={() => toggleLike(String(product.id))}
                   className="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm text-[10px]"
                 >
-                  {likedProducts.includes(String(product.id)) ? "❤️" : "🤍"}
+                  <Heart className={`size-4 ${likedProducts.includes(String(product.id)) ? "fill-red-500 text-red-500" : "text-neutral-600"}`} />
                 </button>
                 
                 <div>
@@ -510,22 +513,22 @@ export default function CollectionPage() {
       <section className="bg-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 text-xs text-center md:text-left">
           <div className="space-y-2 p-2">
-            <div className="text-xl text-purple-600">⚡</div>
+            <Bolt className="mx-auto size-5 text-purple-600 md:mx-0" />
             <h4 className="font-bold text-neutral-800 uppercase tracking-wider">Livraison Bamako Express</h4>
             <p className="text-neutral-500 leading-relaxed font-light">Vos ensembles vestimentaires et lingerie livrés à domicile sous 24h maximum.</p>
           </div>
           <div className="space-y-2 p-2">
-            <div className="text-xl text-purple-600">📦</div>
+            <Package className="mx-auto size-5 text-purple-600 md:mx-0" />
             <h4 className="font-bold text-neutral-800 uppercase tracking-wider">Expédition Provinces 48h</h4>
             <p className="text-neutral-500 leading-relaxed font-light">Envois sécurisés via compagnies de transport vers Ségou, Sikasso, Kayes et Mopti.</p>
           </div>
           <div className="space-y-2 p-2">
-            <div className="text-xl text-purple-600">💬</div>
+            <MessageCircle className="mx-auto size-5 text-purple-600 md:mx-0" />
             <h4 className="font-bold text-neutral-800 uppercase tracking-wider">Conseil WhatsApp Continu</h4>
             <p className="text-neutral-500 leading-relaxed font-light">Nos conseillers vous valident la taille idéale en stock par message avant l'envoi.</p>
           </div>
           <div className="space-y-2 p-2">
-            <div className="text-xl text-purple-600">🤝</div>
+            <Handshake className="mx-auto size-5 text-purple-600 md:mx-0" />
             <h4 className="font-bold text-neutral-800 uppercase tracking-wider">Paiement Serein</h4>
             <p className="text-neutral-500 leading-relaxed font-light">Réglez en toute sécurité en espèces lors de la livraison ou par Orange/Moov Money.</p>
           </div>
@@ -533,14 +536,11 @@ export default function CollectionPage() {
       </section>
 
       {/* ================= MODAL FILTRES MOBILE ================= */}
-      {isMobileFilterOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end lg:hidden">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileFilterOpen(false)} />
-          <div className="relative w-full max-w-xs bg-white h-full shadow-2xl flex flex-col p-6 overflow-y-auto text-xs space-y-6 z-10">
-            <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
-              <h2 className="text-sm font-bold text-neutral-900 uppercase tracking-wider">Filtres de recherche</h2>
-              <button onClick={() => setIsMobileFilterOpen(false)} className="text-lg font-light p-1">✕</button>
-            </div>
+      <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
+          <SheetContent side="right" className="flex w-full max-w-xs flex-col space-y-6 overflow-y-auto p-6 text-xs lg:hidden">
+            <SheetHeader className="border-b border-neutral-100 pb-4">
+              <SheetTitle className="text-sm font-bold uppercase tracking-wider text-neutral-900">Filtres de recherche</SheetTitle>
+            </SheetHeader>
 
             <div className="space-y-3">
               <h3 className="font-bold text-neutral-900 uppercase tracking-wide">Par Univers</h3>
@@ -595,15 +595,15 @@ export default function CollectionPage() {
               </label>
             </div>
 
-            <button 
+            <Button
               onClick={() => setIsMobileFilterOpen(false)} 
-              className="w-full py-3 bg-purple-600 text-white font-bold rounded-xl text-center uppercase tracking-wider mt-auto shadow-md"
+              variant="purple"
+              className="mt-auto w-full font-bold uppercase tracking-wider shadow-md"
             >
               Appliquer les Filtres
-            </button>
-          </div>
-        </div>
-      )}
+            </Button>
+          </SheetContent>
+      </Sheet>
     </div>
   );
 }

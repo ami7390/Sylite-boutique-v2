@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { Flame, Headphones, ShieldCheck, Sparkles } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 export default function Home() {
   // =========================================================================
@@ -249,9 +251,7 @@ export default function Home() {
           <div className="absolute -right-10 -top-10 text-neutral-900 text-9xl font-black select-none pointer-events-none opacity-20">SALE</div>
           
           <div className="space-y-4 text-center lg:text-left relative z-10">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-red-500/10 border border-red-500/20 text-red-400 font-bold text-[10px] uppercase rounded-md tracking-wider">
-              ⚡ Offre Flash Limitée
-            </div>
+            <Badge className="gap-1.5 bg-red-500/10 border-red-500/20 text-red-400 uppercase tracking-wider"><Flame className="h-3.5 w-3.5" /> Offre Flash Limitée</Badge>
             <h3 className="text-2xl sm:text-3xl font-serif">La Gaine Ceinture Sculptante</h3>
             <p className="text-neutral-400 text-xs sm:text-sm max-w-md font-light">
               Profitez d'un tarif préférentiel exclusif sur nos pièces de maintien corporel haut de gamme avant rupture définitive de notre stock de la semaine.
@@ -405,17 +405,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
             <div className="flex flex-col items-center p-4">
-              <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mb-4 text-xl">✨</div>
+              <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mb-4"><Sparkles className="h-6 w-6" /></div>
               <h3 className="text-sm font-bold text-neutral-800 mb-2 uppercase tracking-wider">Qualité Premium</h3>
               <p className="text-xs text-neutral-500 leading-relaxed max-w-xs">Chaque vêtement, accessoire et produit de soin est rigoureusement sélectionné pour son efficacité et ses finitions.</p>
             </div>
             <div className="flex flex-col items-center p-4">
-              <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mb-4 text-xl">👠</div>
+              <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mb-4"><ShieldCheck className="h-6 w-6" /></div>
               <h3 className="text-sm font-bold text-neutral-800 mb-2 uppercase tracking-wider">Style Tendance</h3>
               <p className="text-xs text-neutral-500 leading-relaxed max-w-xs">Une sélection exclusive en phase avec les tendances actuelles de la mode et du bien-être.</p>
             </div>
             <div className="flex flex-col items-center p-4">
-              <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mb-4 text-xl">👩‍💼</div>
+              <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mb-4"><Headphones className="h-6 w-6" /></div>
               <h3 className="text-sm font-bold text-neutral-800 mb-2 uppercase tracking-wider">Service Client Dédié</h3>
               <p className="text-xs text-neutral-500 leading-relaxed max-w-xs">Notre équipe vous accompagne au quotidien pour vous offrir une expérience d'achat personnalisée.</p>
             </div>

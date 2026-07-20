@@ -2,8 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { ArrowRight, MessageCircle, Settings, Sparkles, Target, Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabaseclient";
 import { subscribeToProductChanges } from "@/lib/product-sync";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ProductRow {
   id: number | string;
@@ -193,16 +198,14 @@ export default function NouvelArrivagePage() {
       {/* ================= RÉASSORT & FOMO ================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 mb-8">
         <div className="bg-gradient-to-r from-purple-900 to-neutral-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-lg">
-          <div className="absolute right-0 bottom-0 opacity-10 text-9xl select-none pointer-events-none transform translate-x-10 translate-y-10">✨</div>
+          <Sparkles className="pointer-events-none absolute -bottom-8 -right-8 size-36 text-white opacity-10" />
           <div className="relative z-10 max-w-2xl">
             <span className="text-[10px] font-bold tracking-widest text-purple-300 bg-purple-500/20 px-2.5 py-1 rounded-md uppercase">Service Exclusif</span>
             <h3 className="text-xl sm:text-2xl font-serif mt-3 mb-2">Un modèle en rupture ou introuvable ?</h3>
             <p className="text-xs sm:text-sm text-neutral-300 font-light leading-relaxed mb-6">
               Nos pièces s'envolent très vite. Notre équipe s'occupe de vous le trouver sur commande.
             </p>
-            <a href={specialRequestUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-white text-neutral-900 text-xs font-bold px-5 py-3 rounded-xl hover:bg-neutral-100 transition-all shadow-md">
-              🎯 Faire une demande personnalisée
-            </a>
+            <Button asChild variant="outline" className="bg-white text-xs font-bold text-neutral-900 shadow-md"><a href={specialRequestUrl} target="_blank" rel="noopener noreferrer"><Target className="size-4" /> Faire une demande personnalisée</a></Button>
           </div>
         </div>
       </section>
@@ -229,7 +232,7 @@ export default function NouvelArrivagePage() {
             const finalImageSrc = product.image_url || product.image || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600";
 
             return (
-              <div key={`limited-local-render-${product.id || index}-${index}`} className="bg-white border border-neutral-200/60 rounded-2xl p-4 flex items-center gap-4 hover:border-purple-200 transition-all">
+              <Card key={`limited-local-render-${product.id || index}-${index}`} className="flex-row items-center gap-4 p-4 transition-all hover:border-purple-200">
                 <div className="relative w-20 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-neutral-100">
                   <Image src={finalImageSrc} alt={product.name} fill className="object-cover" />
                 </div>
@@ -238,10 +241,10 @@ export default function NouvelArrivagePage() {
                   <h4 className="text-xs font-semibold text-neutral-800 truncate mb-1">{product.name}</h4>
                   <div className="text-sm font-black text-neutral-900 mb-2">{displayPrice}</div>
                   <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Bonjour, je souhaite réserver en urgence l'article : ${product.name}`)}`} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-purple-600 hover:text-purple-700 transition-colors flex items-center gap-1">
-                    Bloquer ma pièce →
+                    Bloquer ma pièce <ArrowRight className="size-3" />
                   </a>
                 </div>
-              </div>
+              </Card>
             );
           })}
         </div>
@@ -313,7 +316,7 @@ function ProductGridWithProps({ filterCategory, refreshKey, onProductDeleted, sh
   };
 
   if (loading) {
-    return <div className="text-center py-20 text-neutral-400 text-xs animate-pulse">Chargement de la collection SyLite...</div>;
+    return <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">{Array.from({ length: 8 }).map((_, index) => <Skeleton key={index} className="h-[430px]" />)}</div>;
   }
 
   if (products.length === 0) {
@@ -340,19 +343,22 @@ function ProductGridWithProps({ filterCategory, refreshKey, onProductDeleted, sh
           <div key={`product-card-container-${product.safeId}`} className="bg-white rounded-2xl overflow-hidden border border-neutral-100 shadow-sm hover:shadow-xl hover:border-purple-100 transition-all duration-300 group flex flex-col relative">
             
             {isDbProduct && showAdminActions && (
-              <button 
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
                 onClick={() => handleDelete(product.id, product.name)}
                 className="absolute top-3 right-3 z-30 bg-red-500 hover:bg-red-600 text-white text-[10px] font-bold p-2 rounded-xl transition-all shadow-md"
               >
-                🗑️ Supprimer
-              </button>
+                <Trash2 className="size-3" /> Supprimer
+              </Button>
             )}
 
             <div className="relative aspect-[4/5] bg-neutral-100 overflow-hidden">
               <Image src={finalGridImage} alt={product.name} fill className="object-cover transform group-hover:scale-105 transition-transform duration-500" />
-              <span className="absolute bottom-3 left-3 bg-neutral-950/80 backdrop-blur-md text-purple-400 text-[9px] font-bold px-2.5 py-1 rounded-md border border-purple-500/10 z-10 uppercase tracking-wider">
+              <Badge variant="secondary" className="absolute bottom-3 left-3 z-10 rounded-md border-purple-500/10 bg-neutral-950/80 text-purple-400 backdrop-blur-md">
                 {product.displayCategory || product.category}
-              </span>
+              </Badge>
             </div>
             
             <div className="p-5 flex-grow flex flex-col justify-between">
@@ -367,13 +373,9 @@ function ProductGridWithProps({ filterCategory, refreshKey, onProductDeleted, sh
                   <div className="text-base font-black text-neutral-900">{formattedPrice}</div>
                 </div>
 
-                <a href={optionsUrl} className="w-full inline-flex justify-center items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl bg-neutral-100 text-neutral-800 hover:bg-neutral-200 transition-all border border-neutral-200">
-                  options ⚙️
-                </a>
+                <Button asChild variant="secondary" className="w-full text-xs font-bold"><a href={optionsUrl}><Settings className="size-4" /> Options</a></Button>
                 
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full inline-flex justify-center items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl bg-emerald-600 text-white hover:bg-emerald-500 transition-all shadow-sm">
-                  Commander via WhatsApp 💬
-                </a>
+                <Button asChild variant="whatsapp" className="w-full text-xs font-bold shadow-sm"><a href={whatsappUrl} target="_blank" rel="noopener noreferrer"><MessageCircle className="size-4" /> Commander via WhatsApp</a></Button>
               </div>
             </div>
           </div>

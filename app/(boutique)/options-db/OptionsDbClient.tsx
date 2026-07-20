@@ -4,7 +4,11 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowLeft, MessageCircle, Minus, PackageX, Plus } from 'lucide-react';
 import { supabase } from '@/lib/supabaseclient';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface DbProduct {
   id: number | string;
@@ -90,23 +94,19 @@ export default function OptionsDbClient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral-50/60 flex items-center justify-center text-xs text-neutral-400">
-        Chargement des détails uniques du produit...
-      </div>
+      <div className="mx-auto grid min-h-screen max-w-5xl grid-cols-1 gap-8 px-4 py-10 md:grid-cols-2"><Skeleton className="min-h-[520px]" /><Skeleton className="min-h-[420px]" /></div>
     );
   }
 
   if (!product) {
     return (
       <div className="min-h-screen bg-neutral-50/60 flex flex-col items-center justify-center p-4 text-center space-y-4">
-        <div className="text-3xl">📭</div>
+        <PackageX className="size-8 text-purple-600" />
         <h1 className="text-sm font-bold text-neutral-800">Produit introuvable</h1>
         <p className="text-xs text-neutral-500 max-w-xs leading-relaxed">
           Ce modèle n'existe pas ou a été retiré de notre catalogue en ligne.
         </p>
-        <button onClick={() => router.back()} className="px-4 py-2 bg-neutral-950 text-white text-xs font-semibold rounded-xl">
-          Retour au catalogue
-        </button>
+        <Button onClick={() => router.back()} size="sm"><ArrowLeft className="size-4" /> Retour au catalogue</Button>
       </div>
     );
   }
@@ -118,9 +118,7 @@ export default function OptionsDbClient() {
       
       <nav className="bg-white border-b border-neutral-200/80 px-4 py-3 sticky top-0 z-30 shadow-sm">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <button onClick={() => router.back()} className="flex items-center gap-1 text-neutral-600 hover:text-neutral-900 font-medium">
-            ‹ Retour au catalogue
-          </button>
+          <Button onClick={() => router.back()} variant="ghost" size="sm"><ArrowLeft className="size-4" /> Retour au catalogue</Button>
           <span className="text-neutral-400 font-mono tracking-wider uppercase text-[10px] hidden sm:inline">
             Fiche Produit Personnalisée
           </span>
@@ -148,9 +146,9 @@ export default function OptionsDbClient() {
               )}
 
               {(product.tag || product.badge) && (
-                <span className="absolute top-3 left-3 bg-purple-600 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm z-10 uppercase tracking-wide">
+                <Badge className="absolute left-3 top-3 z-10 rounded shadow-sm">
                   {product.tag || product.badge}
-                </span>
+                </Badge>
               )}
             </div>
           </div>
@@ -208,34 +206,33 @@ export default function OptionsDbClient() {
               <div className="space-y-2 pt-2">
                 <h3 className="font-bold text-neutral-800 uppercase tracking-wider text-[10px]">Quantité</h3>
                 <div className="flex items-center gap-1 border border-neutral-200 rounded-lg w-28 bg-white overflow-hidden shadow-sm">
-                  <button 
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
                     disabled={quantity <= 1}
                     onClick={() => setQuantity(prev => prev - 1)}
-                    className="w-8 h-8 font-bold text-neutral-600 hover:bg-neutral-50 transition-colors"
                   >
-                    -
-                  </button>
+                    <Minus className="size-4" />
+                  </Button>
                   <span className="flex-grow text-center font-bold text-neutral-800">{quantity}</span>
-                  <button 
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
                     onClick={() => setQuantity(prev => prev + 1)}
-                    className="w-8 h-8 font-bold text-neutral-600 hover:bg-neutral-50 transition-colors"
                   >
-                    +
-                  </button>
+                    <Plus className="size-4" />
+                  </Button>
                 </div>
               </div>
             </div>
 
             {/* LE BOUTON WHATSAPP INTEGRÉ AU NUMÉRO 94939380 */}
             <div className="space-y-3 pt-4 border-t border-neutral-100">
-              <a
-                href={getWhatsAppLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3.5 bg-neutral-950 text-white hover:bg-purple-600 transition-all font-bold uppercase tracking-wider rounded-xl text-center shadow-md flex items-center justify-center gap-2 text-xs"
-              >
-                <span>🛍️</span> Confirmer l'achat sur WhatsApp
-              </a>
+              <Button asChild className="h-11 w-full text-xs font-bold uppercase tracking-wider shadow-md">
+                <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer"><MessageCircle className="size-4" /> Confirmer l&apos;achat sur WhatsApp</a>
+              </Button>
               <Link href="/collection" className="w-full py-3 border border-neutral-200 text-neutral-700 font-medium rounded-xl text-center hover:bg-neutral-50 transition-all block text-xs">
                 Continuer mes achats
               </Link>

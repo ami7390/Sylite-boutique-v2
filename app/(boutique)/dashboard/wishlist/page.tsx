@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import { Heart } from 'lucide-react';
 
 export default function WishlistPage() {
   // Simulation d'articles mis en favoris
@@ -30,7 +31,7 @@ export default function WishlistPage() {
                   <p className="font-medium text-neutral-800">{item.name}</p>
                   <p className="text-purple-700 font-bold mt-1">{item.price}</p>
                 </div>
-                <button className="text-neutral-400 hover:text-red-500 transition-colors text-sm">❤️</button>
+                <button className="text-neutral-400 hover:text-red-500 transition-colors" aria-label="Retirer des favoris"><Heart className="h-4 w-4 fill-current" /></button>
               </div>
             ))}
           </div>

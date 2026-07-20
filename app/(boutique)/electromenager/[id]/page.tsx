@@ -3,6 +3,10 @@
 import { useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image'; 
+import { AlertTriangle, Heart, Minus, Plus, ShieldCheck, ShoppingCart, Truck } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 // IMPORTATION : On se connecte à notre boîte à outils panier
 import { useCart } from '../../context/cartcontext';
@@ -170,12 +174,10 @@ export default function FicheProduitPage() {
   if (!product) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-neutral-50 p-4 text-center">
-        <span className="text-4xl mb-2">⚠️</span>
+        <AlertTriangle className="h-10 w-10 mb-2 text-amber-500" />
         <h1 className="text-lg font-bold text-neutral-800">Appareil introuvable</h1>
         <p className="text-neutral-500 max-w-xs mt-1 mb-6">La référence demandée n'existe pas ou a été déplacée.</p>
-        <button onClick={() => router.push('/electromenager')} className="px-4 py-2 bg-purple-600 text-white rounded-xl font-bold text-xs hover:bg-purple-700 transition-colors">
-          Retour au catalogue
-        </button>
+        <Button variant="purple" onClick={() => router.push('/electromenager')}>Retour au catalogue</Button>
       </div>
     );
   }
@@ -201,7 +203,7 @@ export default function FicheProduitPage() {
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 bg-white p-4 sm:p-8 rounded-3xl border border-neutral-200/60 shadow-sm">
+        <Card className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 p-4 sm:p-8 rounded-3xl border-neutral-200/60 shadow-sm">
           
           <div className="space-y-4">
             <div className="relative aspect-square bg-neutral-50 rounded-2xl overflow-hidden border border-neutral-100">
@@ -213,21 +215,21 @@ export default function FicheProduitPage() {
                 priority
               />
               {product.tag && (
-                <span className="absolute top-4 left-4 bg-purple-600 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                <Badge className="absolute top-4 left-4 bg-purple-600 text-white text-[9px] uppercase tracking-wider">
                   {product.tag}
-                </span>
+                </Badge>
               )}
               {product.badge && (
-                <span className="absolute top-4 left-4 bg-amber-500 text-neutral-950 text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                <Badge className="absolute top-4 left-4 bg-amber-500 text-neutral-950 text-[9px] uppercase tracking-wider">
                   {product.badge}
-                </span>
+                </Badge>
               )}
               
               <button 
                 onClick={() => setIsLiked(!isLiked)} 
                 className="absolute top-4 right-4 bg-white shadow-sm hover:shadow-md border p-2.5 rounded-full text-base transition-transform active:scale-95"
               >
-                {isLiked ? "❤️" : "🤍"}
+                <Heart className={`h-5 w-5 ${isLiked ? "fill-rose-500 text-rose-500" : "text-neutral-500"}`} />
               </button>
             </div>
           </div>
@@ -260,19 +262,19 @@ export default function FicheProduitPage() {
                 <div className="space-y-2">
                   <span className="text-neutral-400 font-medium block">Quantité :</span>
                   <div className="flex items-center gap-1 bg-neutral-100 w-fit p-1 rounded-xl border">
-                    <button 
+                    <Button variant="ghost" size="icon"
                       onClick={() => setQuantity(q => Math.max(1, q - 1))}
                       className="w-8 h-8 font-bold text-neutral-600 hover:bg-white rounded-lg transition-colors text-sm"
                     >
-                      -
-                    </button>
+                      <Minus className="h-4 w-4" />
+                    </Button>
                     <span className="w-10 text-center font-bold text-sm text-neutral-900">{quantity}</span>
-                    <button 
+                    <Button variant="ghost" size="icon"
                       onClick={() => setQuantity(q => q + 1)}
                       className="w-8 h-8 font-bold text-neutral-600 hover:bg-white rounded-lg transition-colors text-sm"
                     >
-                      +
-                    </button>
+                      <Plus className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               )}
@@ -280,7 +282,7 @@ export default function FicheProduitPage() {
 
             {/* ACTION DU BOUTON (ORDINATEUR) */}
             <div className="hidden sm:flex items-center gap-3 pt-4">
-              <button 
+              <Button
                 onClick={handleAddToCart}
                 disabled={!product.inStock}
                 className={`flex-grow py-3.5 px-6 rounded-xl font-bold uppercase tracking-wider text-center transition-all ${
@@ -289,20 +291,20 @@ export default function FicheProduitPage() {
                     : 'bg-neutral-200 text-neutral-400 cursor-not-allowed'
                 }`}
               >
-                {product.inStock ? '🛒 Ajouter au panier' : '❌ Épuisé'}
-              </button>
+                {product.inStock && <ShoppingCart className="h-4 w-4" />}{product.inStock ? 'Ajouter au panier' : 'Épuisé'}
+              </Button>
             </div>
 
             <div className="bg-neutral-50 border rounded-2xl p-4 space-y-3">
               <div className="flex items-start gap-3">
-                <span className="text-lg">🚛</span>
+                <Truck className="h-5 w-5 text-purple-600" />
                 <div>
                   <h4 className="font-bold text-neutral-800">Livraison Domestique Sécurisée</h4>
                   <p className="text-neutral-500 font-light mt-0.5">Livraison rapide sur Bamako avec vérification physique obligatoire lors de la réception.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 border-t pt-3">
-                <span className="text-lg">🛡️</span>
+                <ShieldCheck className="h-5 w-5 text-purple-600" />
                 <div>
                   <h4 className="font-bold text-neutral-800">Garantie & Support Direct</h4>
                   <p className="text-neutral-500 font-light mt-0.5">Équipement couvert pendant <span className="font-semibold text-neutral-700">{product.specs.warranty}</span> avec assistance prioritaire.</p>
@@ -311,7 +313,7 @@ export default function FicheProduitPage() {
             </div>
 
           </div>
-        </div>
+        </Card>
 
         <section className="mt-8 bg-white border border-neutral-200/60 rounded-3xl p-4 sm:p-8 shadow-sm space-y-6">
           <div className="flex border-b gap-6 text-sm font-medium">
@@ -372,7 +374,7 @@ export default function FicheProduitPage() {
           <span className="text-[10px] text-neutral-400 block font-medium">Montant Global</span>
           <span className="text-base font-black text-neutral-900">{product.formattedPrice}</span>
         </div>
-        <button 
+        <Button
           onClick={handleAddToCart}
           disabled={!product.inStock}
           className={`py-3 px-6 rounded-xl font-bold uppercase tracking-wider text-center text-[11px] flex-grow shadow-md transition-all ${
@@ -381,8 +383,8 @@ export default function FicheProduitPage() {
               : 'bg-neutral-200 text-neutral-400 cursor-not-allowed shadow-none'
           }`}
         >
-          {product.inStock ? '🛒 Ajouter' : 'Épuisé'}
-        </button>
+          {product.inStock && <ShoppingCart className="h-4 w-4" />}{product.inStock ? 'Ajouter' : 'Épuisé'}
+        </Button>
       </div>
 
     </div>

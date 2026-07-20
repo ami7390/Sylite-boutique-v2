@@ -3,6 +3,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import { MessageCircle, ShoppingBag } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 // Importation du catalogue dynamique partagé
 import { allProducts } from '../../data/products';
@@ -114,14 +118,12 @@ L'article est-il bien disponible pour une livraison ?`;
   if (!product) {
     return (
       <div className="bg-white min-h-screen flex flex-col items-center justify-center p-6 text-xs antialiased">
-        <div className="text-center max-w-sm space-y-4 border border-neutral-100 p-8 rounded-2xl">
-          <div className="text-2xl">🛍️</div>
+        <Card className="max-w-sm space-y-4 p-8 text-center">
+          <ShoppingBag className="mx-auto size-7 text-purple-600" />
           <h2 className="font-bold text-neutral-800 uppercase tracking-wider">Aucun modèle sélectionné</h2>
           <p className="text-neutral-500 font-light">Retournez sur le catalogue de votre boutique pour configurer vos options.</p>
-          <a href="/" className="inline-block px-5 py-2.5 bg-neutral-950 text-white font-semibold rounded-xl hover:bg-purple-600 transition-colors">
-            Retour à l'accueil
-          </a>
-        </div>
+          <Button asChild><a href="/">Retour à l&apos;accueil</a></Button>
+        </Card>
       </div>
     );
   }
@@ -155,9 +157,9 @@ L'article est-il bien disponible pour une livraison ?`;
           {/* COLONNE DE DROITE : CONFIGURATION */}
           <div className="space-y-8 lg:py-2">
             <header className="border-b border-neutral-100 pb-6 space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-purple-600 bg-purple-50 px-2.5 py-1 rounded-md inline-block">
+              <Badge variant="outline" className="rounded-md">
                 {cleanCategoryName(product.category)}
-              </span>
+              </Badge>
               <h1 className="text-2xl sm:text-3xl font-serif tracking-wide text-neutral-900 font-medium">
                 {product.name}
               </h1>
@@ -214,8 +216,9 @@ L'article est-il bien disponible pour une livraison ?`;
 
               {/* Action : Redirection WhatsApp */}
               <div className="pt-6 border-t border-neutral-100 space-y-3">
-                <button 
+                <Button
                   onClick={handleWhatsAppOrder}
+                  variant="whatsapp"
                   disabled={product.inStock === false}
                   className={`w-full inline-flex justify-center items-center gap-2 px-6 py-4 text-white text-xs font-bold tracking-wider uppercase rounded-xl transition-all shadow-sm ${
                     product.inStock === false 
@@ -223,8 +226,8 @@ L'article est-il bien disponible pour une livraison ?`;
                       : "bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/10"
                   }`}
                 >
-                  <span>🛍️</span> {product.inStock === false ? "Article non disponible" : "Commander via WhatsApp"}
-                </button>
+                  <MessageCircle className="size-4" /> {product.inStock === false ? "Article non disponible" : "Commander via WhatsApp"}
+                </Button>
                 <p className="text-[10px] text-center text-neutral-400 font-light">
                   Votre sélection (*{selectedColor}* en taille *{selectedSize}*) sera partagée automatiquement dans la discussion.
                 </p>

@@ -2,8 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { Edit3, Inbox, KeyRound, LoaderCircle, LogOut, MessageSquare, Package, RefreshCw, Save, Sparkles, Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabaseclient";
 import { notifyProductsChanged } from "@/lib/product-sync";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Définition des interfaces pour un typage TypeScript propre
 interface Product {
@@ -232,23 +238,24 @@ export default function AdminDashboardPage() {
   if (!isAuthenticated) {
     return (
       <div className="bg-neutral-950 min-h-screen flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl border border-neutral-100">
-          <h2 className="text-xl font-serif font-bold text-neutral-950 text-center mb-2">🔑 Espace Direction</h2>
+        <Card className="w-full max-w-md rounded-3xl p-8 shadow-2xl">
+          <h2 className="mb-2 flex items-center justify-center gap-2 text-center font-serif text-xl font-bold text-neutral-950"><KeyRound className="size-5 text-purple-600" /> Espace Direction</h2>
           <p className="text-xs text-neutral-500 text-center mb-6">Connectez-vous pour administrer la plateforme SyLite.</p>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-[10px] font-bold uppercase text-neutral-500 mb-1">Email</label>
-              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@sylite.com" className="w-full text-xs px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:border-purple-500 text-neutral-900" />
+              <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@sylite.com" className="h-11 px-4 text-xs" />
             </div>
             <div>
               <label className="block text-[10px] font-bold uppercase text-neutral-500 mb-1">Mot de passe</label>
-              <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="w-full text-xs px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:border-purple-500 text-neutral-900" />
+              <Input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="h-11 px-4 text-xs" />
             </div>
-            <button type="submit" disabled={authLoading} className="w-full text-xs font-bold bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl transition-all disabled:bg-neutral-300">
+            <Button type="submit" variant="purple" disabled={authLoading} className="h-11 w-full text-xs font-bold">
+              {authLoading && <LoaderCircle className="size-4 animate-spin" />}
               {authLoading ? "Vérification..." : "Entrer dans le tableau de bord"}
-            </button>
+            </Button>
           </form>
-        </div>
+        </Card>
       </div>
     );
   }
@@ -259,11 +266,11 @@ export default function AdminDashboardPage() {
         <div className="flex items-center gap-6">
           <h1 className="text-lg font-serif font-bold tracking-wider">SyLite <span className="text-purple-400 italic font-normal">Backoffice</span></h1>
           <div className="flex gap-2">
-            <button onClick={() => setActiveTab("products")} className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === "products" ? "bg-purple-600 text-white" : "text-neutral-400 hover:text-white"}`}>📦 Produits</button>
-            <button onClick={() => setActiveTab("messages")} className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === "messages" ? "bg-purple-600 text-white" : "text-neutral-400 hover:text-white"}`}>💬 Messages</button>
+            <Button onClick={() => setActiveTab("products")} variant={activeTab === "products" ? "purple" : "ghost"} size="sm" className={activeTab === "products" ? "" : "text-neutral-400 hover:bg-neutral-800 hover:text-white"}><Package className="size-4" /> Produits</Button>
+            <Button onClick={() => setActiveTab("messages")} variant={activeTab === "messages" ? "purple" : "ghost"} size="sm" className={activeTab === "messages" ? "" : "text-neutral-400 hover:bg-neutral-800 hover:text-white"}><MessageSquare className="size-4" /> Messages</Button>
           </div>
         </div>
-        <button onClick={handleLogout} className="text-xs font-bold bg-neutral-800 hover:bg-neutral-700 px-4 py-2 rounded-xl transition-all">Déconnexion</button>
+        <Button onClick={handleLogout} variant="secondary" size="sm" className="bg-neutral-800 text-white hover:bg-neutral-700"><LogOut className="size-4" /> Déconnexion</Button>
       </nav>
 
       <main className="max-w-7xl mx-auto p-6 lg:p-8">
@@ -271,8 +278,9 @@ export default function AdminDashboardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             <div className={`bg-white border rounded-3xl p-6 shadow-sm transition-all duration-300 ${editingProductId ? 'border-amber-400 ring-1 ring-amber-100' : 'border-neutral-200'}`}>
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-sm font-bold text-neutral-900">
-                  {editingProductId ? "✏️ Modifier le produit" : "✨ Ajouter un article"}
+                <h3 className="flex items-center gap-2 text-sm font-bold text-neutral-900">
+                  {editingProductId ? <Edit3 className="size-4 text-amber-500" /> : <Sparkles className="size-4 text-purple-600" />}
+                  {editingProductId ? "Modifier le produit" : "Ajouter un article"}
                 </h3>
                 {editingProductId && (
                   <button type="button" onClick={cancelEdit} className="text-[10px] bg-neutral-100 hover:bg-neutral-200 text-neutral-600 px-2 py-1 rounded-md font-bold">
@@ -284,12 +292,12 @@ export default function AdminDashboardPage() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-[10px] text-neutral-500 font-bold uppercase mb-1">Nom du produit</label>
-                  <input type="text" value={prodName} onChange={(e) => setProdName(e.target.value)} placeholder="Ex: Gaine Amincissante Ultra" className="w-full text-xs px-3 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:border-purple-500 text-neutral-800" />
+                  <Input type="text" value={prodName} onChange={(e) => setProdName(e.target.value)} placeholder="Ex: Gaine Amincissante Ultra" className="text-xs" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[10px] text-neutral-500 font-bold uppercase mb-1">Prix (FCFA)</label>
-                    <input type="number" value={prodPrice} onChange={(e) => setProdPrice(e.target.value)} placeholder="15000" className="w-full text-xs px-3 py-2.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:border-purple-500 text-neutral-800" />
+                    <Input type="number" value={prodPrice} onChange={(e) => setProdPrice(e.target.value)} placeholder="15000" className="text-xs" />
                   </div>
                   <div>
                     <label className="block text-[10px] text-neutral-500 font-bold uppercase mb-1">Catégorie</label>
@@ -313,14 +321,15 @@ export default function AdminDashboardPage() {
                   {prodImageUrl && <div className="mt-2 w-12 h-12 bg-cover rounded-lg border" style={{ backgroundImage: `url(${prodImageUrl})` }} />}
                 </div>
                 
-                <button type="button" onClick={handleSaveProduct} disabled={isSubmitting} className={`w-full text-xs font-bold text-white py-2.5 rounded-xl transition-all disabled:bg-neutral-300 ${editingProductId ? 'bg-amber-500 hover:bg-amber-600' : 'bg-purple-600 hover:bg-purple-700'}`}>
+                <Button type="button" variant={editingProductId ? "default" : "purple"} onClick={handleSaveProduct} disabled={isSubmitting} className={`w-full text-xs font-bold ${editingProductId ? "bg-amber-500 hover:bg-amber-600" : ""}`}>
+                  {isSubmitting ? <LoaderCircle className="size-4 animate-spin" /> : <Save className="size-4" />}
                   {isSubmitting ? "Enregistrement en cours..." : editingProductId ? "Mettre à jour le produit" : "Enregistrer et publier"}
-                </button>
+                </Button>
               </div>
             </div>
 
             <div className="lg:col-span-2 bg-white border border-neutral-200 rounded-3xl p-6 shadow-sm">
-              <h3 className="text-sm font-bold text-neutral-900 mb-4">📦 Produits actuellement enregistrés sur Supabase ({products.length})</h3>
+              <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-neutral-900"><Package className="size-4 text-purple-600" /> Produits actuellement enregistrés sur Supabase ({products.length})</h3>
               <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2 scrollbar-none">
                 {products.map((p) => (
                   <div key={p.id} className={`flex items-center justify-between p-3 border rounded-2xl transition-all ${editingProductId === p.id ? 'border-amber-400 bg-amber-50/20' : 'border-neutral-100 hover:border-purple-100'}`}>
@@ -341,8 +350,8 @@ export default function AdminDashboardPage() {
                     <div className="flex items-center gap-2 sm:gap-4">
                       <span className="text-xs font-black text-neutral-950 whitespace-nowrap">{p.price} FCFA</span>
                       <div className="flex gap-1.5">
-                        <button onClick={() => startEdit(p)} className="text-[10px] text-amber-700 bg-amber-50 hover:bg-amber-100 font-bold px-3 py-1.5 rounded-xl transition-all">Modifier</button>
-                        <button onClick={() => handleDeleteProduct(p.id, p.name)} className="text-[10px] text-red-600 bg-red-50 hover:bg-red-100 font-bold px-3 py-1.5 rounded-xl transition-all">Supprimer</button>
+                        <Button onClick={() => startEdit(p)} variant="ghost" size="sm" className="h-7 bg-amber-50 px-2 text-[10px] font-bold text-amber-700 hover:bg-amber-100"><Edit3 className="size-3" /> Modifier</Button>
+                        <Button onClick={() => handleDeleteProduct(p.id, p.name)} variant="ghost" size="sm" className="h-7 bg-red-50 px-2 text-[10px] font-bold text-red-600 hover:bg-red-100"><Trash2 className="size-3" /> Supprimer</Button>
                       </div>
                     </div>
                   </div>
@@ -356,12 +365,12 @@ export default function AdminDashboardPage() {
         {activeTab === "messages" && (
           <div className="bg-white border border-neutral-200 rounded-3xl p-6 shadow-sm">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-sm font-bold text-neutral-900">📬 Boîte de réception des formulaires clients</h3>
-              <button onClick={loadMessages} className="text-xs font-bold text-neutral-600 bg-neutral-100 px-3 py-1.5 rounded-xl hover:bg-neutral-200 transition-all">🔄 Actualiser</button>
+              <h3 className="flex items-center gap-2 text-sm font-bold text-neutral-900"><Inbox className="size-4 text-purple-600" /> Boîte de réception des formulaires clients</h3>
+              <Button onClick={loadMessages} variant="secondary" size="sm" className="text-xs font-bold"><RefreshCw className="size-4" /> Actualiser</Button>
             </div>
 
             {loadingMessages ? (
-              <div className="text-center py-10 text-xs text-neutral-400 animate-pulse">Chargement des courriels clients...</div>
+              <div className="space-y-3 py-4">{Array.from({ length: 3 }).map((_, index) => <Skeleton key={index} className="h-28" />)}</div>
             ) : (
               <div className="space-y-4">
                 {messages.map((msg) => (

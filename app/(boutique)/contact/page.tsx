@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { BriefcaseBusiness, Check, ChevronDown, Clock3, FileText, MapPin, MessageCircle, Package, RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -59,28 +63,28 @@ export default function ContactPage() {
 
         {/* 2. BARRE D'ACTIONS IMMÉDIATES (AVEC SUBTILES TOUCHES VIOLETTES) */}
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="bg-white border border-neutral-200/60 rounded-3xl p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 shadow-[0_8px_30px_rgba(110,68,255,0.015)]">
+          <Card className="grid grid-cols-1 gap-4 rounded-3xl p-4 shadow-[0_8px_30px_rgba(110,68,255,0.015)] sm:grid-cols-2 sm:p-6 lg:grid-cols-4">
             <div className="p-4 rounded-2xl hover:bg-purple-50/30 border border-transparent hover:border-purple-100 transition-all cursor-pointer group">
-              <span className="text-xl block mb-2">📦</span>
+              <Package className="mb-2 size-5 text-purple-600" />
               <h3 className="font-bold text-neutral-900 group-hover:text-purple-700 transition-colors text-[11px] uppercase tracking-wider">Suivre mon colis</h3>
               <p className="text-neutral-400 font-light mt-1 text-[10px]">Consultez l'état d'avancement de votre livraison en temps réel.</p>
             </div>
             <div className="p-4 rounded-2xl hover:bg-purple-50/30 border border-transparent hover:border-purple-100 transition-all cursor-pointer group">
-              <span className="text-xl block mb-2">🔄</span>
+              <RefreshCw className="mb-2 size-5 text-purple-600" />
               <h3 className="font-bold text-neutral-900 group-hover:text-purple-700 transition-colors text-[11px] uppercase tracking-wider">Retour & Échange</h3>
               <p className="text-neutral-400 font-light mt-1 text-[10px]">Déposez une demande de rétractation ou d'échange sous 14 jours.</p>
             </div>
             <div className="p-4 rounded-2xl hover:bg-purple-50/30 border border-transparent hover:border-purple-100 transition-all cursor-pointer group">
-              <span className="text-xl block mb-2">🧾</span>
+              <FileText className="mb-2 size-5 text-purple-600" />
               <h3 className="font-bold text-neutral-900 group-hover:text-purple-700 transition-colors text-[11px] uppercase tracking-wider">Mes Factures</h3>
               <p className="text-neutral-400 font-light mt-1 text-[10px]">Téléchargez vos pièces justificatives et certificats de garantie.</p>
             </div>
             <div className="p-4 rounded-2xl hover:bg-purple-50/30 border border-transparent hover:border-purple-100 transition-all cursor-pointer group">
-              <span className="text-xl block mb-2">💼</span>
+              <BriefcaseBusiness className="mb-2 size-5 text-purple-600" />
               <h3 className="font-bold text-neutral-900 group-hover:text-purple-700 transition-colors text-[11px] uppercase tracking-wider">Espace Corporate</h3>
               <p className="text-neutral-400 font-light mt-1 text-[10px]">Demandes de devis et catalogues dédiés aux professionnels du BTP.</p>
             </div>
-          </div>
+          </Card>
         </section>
 
         {/* 3. GRILLE DE CONTACT PRINCIPALE */}
@@ -99,7 +103,7 @@ export default function ContactPage() {
                   <label className={`text-[10px] font-bold tracking-wider uppercase transition-colors ${focusedField === 'name' ? 'text-purple-600' : 'text-neutral-400'}`}>
                     Votre nom / Entité
                   </label>
-                  <input 
+                  <Input
                     type="text"
                     required
                     value={formData.name}
@@ -107,7 +111,7 @@ export default function ContactPage() {
                     onBlur={() => setFocusedField(null)}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                     placeholder="Ex: Client ou Entreprise"
-                    className="w-full bg-neutral-50/50 border border-neutral-200 focus:border-purple-400 rounded-xl p-3.5 focus:outline-none focus:bg-white transition-all font-medium text-neutral-800"
+                    className="h-12 bg-neutral-50/50 p-3.5 font-medium"
                   />
                 </div>
 
@@ -126,7 +130,7 @@ export default function ContactPage() {
                       <option value="Service Après-Vente">Service Après-Vente, Conformité & Garantie</option>
                       <option value="Projet d'aménagement / BTP">Projets d'Immobilier, Architecture & BTP</option>
                     </select>
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-purple-600 pointer-events-none text-[9px]">▼</span>
+                    <ChevronDown className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-purple-600" />
                   </div>
                 </div>
 
@@ -147,12 +151,13 @@ export default function ContactPage() {
                 </div>
 
                 {/* BOUTON AVEC MICRO-GRADIENT DE COULEUR MARQUE */}
-                <button 
+                <Button
                   type="submit"
-                  className="w-full py-4 px-6 rounded-xl font-bold uppercase tracking-[0.15em] text-center text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-md hover:shadow-purple-200/50 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.99]"
+                  variant="purple"
+                  className="h-12 w-full bg-gradient-to-r from-purple-600 to-purple-700 px-6 text-center font-bold uppercase tracking-[0.15em] shadow-md hover:from-purple-700 hover:to-purple-800 hover:shadow-purple-200/50 active:scale-[0.99]"
                 >
-                  <span>💬 Ouvrir la discussion WhatsApp</span>
-                </button>
+                  <MessageCircle className="size-4" /> Ouvrir la discussion WhatsApp
+                </Button>
               </form>
             </div>
 
@@ -167,7 +172,7 @@ export default function ContactPage() {
 
                 <div className="space-y-4">
                   <div className="flex items-start gap-4 p-3 bg-white rounded-2xl border border-neutral-100 shadow-sm hover:border-purple-200 transition-colors">
-                    <span className="text-lg text-purple-600">🕒</span>
+                    <Clock3 className="size-5 shrink-0 text-purple-600" />
                     <div>
                       <h4 className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider">Disponibilité du Desk</h4>
                       <p className="text-neutral-600 font-medium mt-0.5">Automne - Printemps | Lun - Sam</p>
@@ -176,7 +181,7 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-start gap-4 p-3 bg-white rounded-2xl border border-neutral-100 shadow-sm hover:border-purple-200 transition-colors">
-                    <span className="text-lg text-purple-600">📍</span>
+                    <MapPin className="size-5 shrink-0 text-purple-600" />
                     <div>
                       <h4 className="font-bold text-neutral-900 text-[11px] uppercase tracking-wider">Showroom Physique</h4>
                       <p className="text-neutral-600 font-medium mt-0.5">Quartier Niamana</p>
@@ -191,11 +196,11 @@ export default function ContactPage() {
                 <h4 className="text-[10px] font-bold tracking-[0.15em] uppercase text-purple-800">Normes de Service Élite</h4>
                 <div className="space-y-3 font-light text-neutral-600 leading-relaxed text-[11px]">
                   <p className="flex items-start gap-2">
-                    <span className="text-purple-600 font-bold">✓</span>
+                    <Check className="mt-0.5 size-4 shrink-0 text-purple-600" />
                     <span><strong>Inspection à la livraison :</strong> Aucun produit n'est livré à l'aveugle. Vous déballez, examinez et validez la conformité physique avec notre agent logistique avant finalisation.</span>
                   </p>
                   <p className="flex items-start gap-2 border-t border-purple-100 pt-2.5">
-                    <span className="text-purple-600 font-bold">✓</span>
+                    <Check className="mt-0.5 size-4 shrink-0 text-purple-600" />
                     <span><strong>Garantie Sérénité :</strong> Nos contrats intègrent un support dédié et une prise en charge rapide des anomalies techniques directement à domicile ou sur site.</span>
                   </p>
                 </div>

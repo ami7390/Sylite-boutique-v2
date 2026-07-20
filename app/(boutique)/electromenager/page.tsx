@@ -3,6 +3,10 @@
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ChefHat, Heart, MessageCircle, Package, Plug, ShieldCheck, Sparkles, Truck, Wind, Wrench, Zap } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 interface ApplianceProduct {
   id: number;
@@ -102,10 +106,10 @@ export default function ElectromenagerPage() {
   ];
 
   const subCategories = [
-    { name: "Tous", icon: "🔌" },
-    { name: "Cuisine", icon: "🍳" },
-    { name: "Entretien", icon: "🧹" },
-    { name: "Bien-être", icon: "💨" }
+    { name: "Tous", icon: Plug },
+    { name: "Cuisine", icon: ChefHat },
+    { name: "Entretien", icon: Wrench },
+    { name: "Bien-être", icon: Wind }
   ];
 
   const filteredProducts = useMemo(() => {
@@ -143,7 +147,9 @@ export default function ElectromenagerPage() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {subCategories.map((cat) => (
+          {subCategories.map((cat) => {
+            const Icon = cat.icon;
+            return (
             <button
               key={cat.name}
               onClick={() => setSelectedCategory(cat.name)}
@@ -151,17 +157,17 @@ export default function ElectromenagerPage() {
                 selectedCategory === cat.name ? "border-purple-600 shadow-md ring-1 ring-purple-600" : "border-neutral-200/60 hover:border-neutral-300"
               }`}
             >
-              <span className="text-2xl group-hover:scale-110 transition-transform">{cat.icon}</span>
+              <Icon className="h-6 w-6 text-purple-600 group-hover:scale-110 transition-transform" />
               <span className="font-bold text-neutral-800">{cat.name}</span>
             </button>
-          ))}
+          )})}
         </div>
       </section>
 
       <section className="bg-white border-y border-neutral-200 sticky top-0 z-30 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2 text-neutral-500 font-medium">
-            <span>🔌</span> <span className="text-neutral-800 font-bold">{filteredProducts.length}</span> technologies prêtes à l'envoi
+            <Plug className="h-4 w-4" /> <span className="text-neutral-800 font-bold">{filteredProducts.length}</span> technologies prêtes à l'envoi
           </div>
 
           <div className="flex items-center gap-4">
@@ -201,34 +207,32 @@ export default function ElectromenagerPage() {
           <div className="flex-grow">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
-                <div key={product.id} className="bg-white rounded-2xl overflow-hidden border border-neutral-200/60 shadow-sm hover:shadow-md transition-all flex flex-col justify-between p-4 relative group">
+                <Card key={product.id} className="rounded-2xl overflow-hidden border-neutral-200/60 shadow-sm hover:shadow-md transition-all flex flex-col justify-between p-4 relative group">
                   <button onClick={() => toggleLike(product.id)} className="absolute top-4 right-4 z-20 bg-neutral-100 p-2 rounded-full hover:bg-neutral-200">
-                    {likedProducts.includes(product.id) ? "❤️" : "🤍"}
+                    <Heart className={`h-4 w-4 ${likedProducts.includes(product.id) ? "fill-rose-500 text-rose-500" : "text-neutral-500"}`} />
                   </button>
 
                   <div>
                     <div className="relative aspect-square bg-neutral-50 rounded-xl overflow-hidden mb-4">
                       <Image src={product.image} alt={product.name} fill className="p-4 group-hover:scale-105 transition-transform object-contain" />
-                      {product.tag && <span className="absolute top-2 left-2 bg-purple-600 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">{product.tag}</span>}
+                      {product.tag && <Badge className="absolute top-2 left-2 bg-purple-600 text-white text-[9px] uppercase">{product.tag}</Badge>}
                     </div>
                     <span className="text-[10px] text-purple-600 font-bold block uppercase tracking-wider mb-1">{product.category}</span>
                     <h2 className="font-bold text-neutral-800 text-sm line-clamp-2 mb-2 group-hover:text-purple-700 transition-colors">{product.name}</h2>
                     
                     <div className="bg-neutral-50 p-2.5 rounded-lg space-y-1 my-3 text-neutral-500">
-                      {product.specs.power && <div>⚡ Puissance : <span className="font-semibold text-neutral-700">{product.specs.power}</span></div>}
-                      {product.specs.capacity && <div>📦 Capacité : <span className="font-semibold text-neutral-700">{product.specs.capacity}</span></div>}
-                      <div>🛡️ Garantie Légale : <span className="font-semibold text-neutral-700">{product.specs.warranty}</span></div>
+                      {product.specs.power && <div className="flex items-center gap-1.5"><Zap className="h-3.5 w-3.5" /> Puissance : <span className="font-semibold text-neutral-700">{product.specs.power}</span></div>}
+                      {product.specs.capacity && <div className="flex items-center gap-1.5"><Package className="h-3.5 w-3.5" /> Capacité : <span className="font-semibold text-neutral-700">{product.specs.capacity}</span></div>}
+                      <div className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5" /> Garantie Légale : <span className="font-semibold text-neutral-700">{product.specs.warranty}</span></div>
                     </div>
                   </div>
 
                   <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between">
                     <span className="text-base font-bold text-neutral-900">{product.formattedPrice}</span>
                     {/* Lien dynamique mis à jour ici */}
-                    <Link href={`/electromenager/${product.id}`} className="px-3 py-2 bg-neutral-950 text-white rounded-xl font-bold hover:bg-purple-600 transition-colors">
-                      Fiche Produit
-                    </Link>
+                    <Button asChild size="sm" className="rounded-xl bg-neutral-950 hover:bg-purple-600"><Link href={`/electromenager/${product.id}`}>Fiche Produit</Link></Button>
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
           </div>
@@ -244,9 +248,7 @@ export default function ElectromenagerPage() {
             <p className="text-neutral-300 font-light leading-relaxed">
               Associez notre **Robot Culinaire Chauffant** avec l'**Air Fryer XXL** et bénéficiez d'une remise immédiate ainsi que d'une installation certifiée gratuite à votre domicile.
             </p>
-            <button className="px-5 py-3 bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold uppercase tracking-wider rounded-xl transition-all">
-              ⚡ Découvrir le Pack Combo
-            </button>
+            <Button className="bg-amber-500 hover:bg-amber-400 text-neutral-950 uppercase tracking-wider rounded-xl"><Sparkles className="h-4 w-4" /> Découvrir le Pack Combo</Button>
           </div>
           <div className="bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm grid grid-cols-2 gap-4">
             <div className="text-center p-2">
@@ -269,11 +271,11 @@ export default function ElectromenagerPage() {
         <h3 className="text-xl font-serif font-bold text-center text-neutral-900">Questions Fréquentes — Électroménager</h3>
         <div className="grid gap-4">
           <div className="bg-white p-4 rounded-xl border border-neutral-200">
-            <h4 className="font-bold text-neutral-800 mb-1">🔌 Les appareils sont-ils compatibles avec le réseau électrique à Bamako ?</h4>
+            <h4 className="font-bold text-neutral-800 mb-1 flex items-center gap-2"><Plug className="h-4 w-4 text-purple-600" /> Les appareils sont-ils compatibles avec le réseau électrique à Bamako ?</h4>
             <p className="text-neutral-500 font-light">Oui, absolument. Tous nos équipements sont configurés pour une tension de 220V-240V avec protection intégrée contre les micro-fluctuations thermiques.</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-neutral-200">
-            <h4 className="font-bold text-neutral-800 mb-1">🛠️ Comment fonctionne la garantie et le Service Après-Vente (SAV) ?</h4>
+            <h4 className="font-bold text-neutral-800 mb-1 flex items-center gap-2"><Wrench className="h-4 w-4 text-purple-600" /> Comment fonctionne la garantie et le Service Après-Vente (SAV) ?</h4>
             <p className="text-neutral-500 font-light">Chaque appareil dispose d'une garantie constructeur de 1 à 2 ans. En cas de dysfonctionnement, nos équipes techniques interviennent directement chez vous.</p>
           </div>
         </div>
@@ -282,17 +284,17 @@ export default function ElectromenagerPage() {
       <section className="bg-white border-t py-12 text-center md:text-left">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-1">
-            <div className="text-xl text-purple-600">🚛</div>
+            <Truck className="h-5 w-5 text-purple-600" />
             <h4 className="font-bold text-neutral-800 uppercase">Livraison Sécurisée & Montage</h4>
             <p className="text-neutral-500 font-light">Livraison sur rendez-vous partout à Bamako avec déballage devant vous pour vérification de conformité.</p>
           </div>
           <div className="space-y-1">
-            <div className="text-xl text-purple-600">🛡️</div>
+            <ShieldCheck className="h-5 w-5 text-purple-600" />
             <h4 className="font-bold text-neutral-800 uppercase">Garantie Certifiée Or</h4>
             <p className="text-neutral-500 font-light">Échange à neuf ou réparation express sous 72h via notre atelier technique spécialisé.</p>
           </div>
           <div className="space-y-1">
-            <div className="text-xl text-purple-600">💬</div>
+            <MessageCircle className="h-5 w-5 text-purple-600" />
             <h4 className="font-bold text-neutral-800 uppercase">Assistance Hotline Dédiée</h4>
             <p className="text-neutral-500 font-light">Besoin d'aide pour la première mise en marche ou l'application connectée ? Nos experts répondent en continu.</p>
           </div>

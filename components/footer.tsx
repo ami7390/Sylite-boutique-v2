@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Camera, MapPin, ThumbsUp } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -12,8 +13,9 @@ export default function Footer() {
               <Image 
                 src="/logo.png" // Votre logo dans le dossier /public
                 alt="SYLITE Logo"
-                layout="fill"
-                objectFit="contain" // Évite toute distorsion du logo
+                fill
+                sizes="128px"
+                className="object-contain"
                 priority
               />
             </div>
@@ -29,6 +31,7 @@ export default function Footer() {
               <li><a href="/" className="hover:text-purple-400 transition-colors">Accueil</a></li>
               <li><a href="/nouvel-arrivage" className="hover:text-purple-400 transition-colors">Nouvel Arrivage</a></li>
               <li><a href="/collection" className="hover:text-purple-400 transition-colors">Collection</a></li>
+              <li><a href="/soins" className="hover:text-purple-400 transition-colors">Soins</a></li>
               <li><a href="/contact" className="hover:text-purple-400 transition-colors">Contact</a></li>
             </ul>
           </div>
@@ -49,9 +52,9 @@ export default function Footer() {
             <p className="text-xs mb-3">Besoin d'aide ? Écrivez-nous à :</p>
             <p className="text-sm font-medium text-purple-400">contact@sylite.com</p>
             <div className="flex space-x-4 mt-4 text-lg">
-              <a href="#" className="hover:text-white transition-colors" aria-label="Instagram">📸</a>
-              <a href="#" className="hover:text-white transition-colors" aria-label="Facebook">🇫</a>
-              <a href="#" className="hover:text-white transition-colors" aria-label="Pinterest">📍</a>
+              <a href="#" className="hover:text-white transition-colors" aria-label="Instagram"><Camera className="size-5" /></a>
+              <a href="#" className="hover:text-white transition-colors" aria-label="Facebook"><ThumbsUp className="size-5" /></a>
+              <a href="#" className="hover:text-white transition-colors" aria-label="Localisation"><MapPin className="size-5" /></a>
             </div>
           </div>
 

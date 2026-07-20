@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import { MessageCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabaseclient';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Utilisation de l'alias absolu pour cibler directement ton vrai fichier
 // @ts-ignore
@@ -68,23 +73,23 @@ export default function ProductGrid({ filterCategory }: ProductGridProps) {
   }, [filterCategory]);
 
   if (loading) {
-    return <div className="text-center py-10 text-neutral-400 text-xs animate-pulse">Chargement de la collection SyLite...</div>;
+    return <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }).map((_, index) => <Skeleton key={index} className="h-[430px] bg-neutral-800/60" />)}</div>;
   }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {products.map((product, index) => (
         /* ICI : Modification de la key pour s'assurer qu'elle soit unique au monde, combinant ID, nom et index */
-        <div key={`product-${product.id}-${product.name}-${index}`} className="bg-neutral-900/40 border border-neutral-800/80 rounded-2xl overflow-hidden group hover:border-purple-500/30 transition-all duration-300 flex flex-col justify-between">
+        <Card key={`product-${product.id}-${product.name}-${index}`} className="group flex flex-col justify-between overflow-hidden border-neutral-800/80 bg-neutral-900/40 transition-all duration-300 hover:border-purple-500/30">
           <div className="aspect-square relative overflow-hidden bg-neutral-950">
             <img 
               src={product.image_url || (product as any).image} 
               alt={product.name} 
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" 
             />
-            <span className="absolute top-3 left-3 bg-purple-900/80 text-purple-300 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-purple-500/30 backdrop-blur-sm">
+            <Badge className="absolute left-3 top-3 border border-purple-500/30 bg-purple-900/80 text-purple-300 backdrop-blur-sm">
               {product.category}
-            </span>
+            </Badge>
           </div>
           
           <div className="p-5 flex flex-col flex-grow justify-between">
@@ -93,16 +98,13 @@ export default function ProductGrid({ filterCategory }: ProductGridProps) {
               <p className="text-purple-400 font-serif font-semibold text-sm mt-1">{product.price} FCFA</p>
             </div>
 
-            <a 
-              href={`https://wa.me/${WHATSAPP_NUMBER}?text=Bonjour%20SyLite,%20je%20souhaite%20commander%20l'article%20%22${encodeURIComponent(product.name)}%22%20au%20prix%20de%20${product.price}%20FCFA.`}
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="w-full text-center py-2.5 bg-purple-700 hover:bg-purple-600 text-white text-xs font-bold rounded-xl uppercase tracking-wider transition-all shadow-md shadow-purple-700/20 flex items-center justify-center gap-2"
-            >
-              Commander via WhatsApp 💬
-            </a>
+            <Button asChild variant="purple" className="w-full text-xs font-bold uppercase tracking-wider shadow-md shadow-purple-700/20">
+              <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=Bonjour%20SyLite,%20je%20souhaite%20commander%20l'article%20%22${encodeURIComponent(product.name)}%22%20au%20prix%20de%20${product.price}%20FCFA.`} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="size-4" /> Commander via WhatsApp
+              </a>
+            </Button>
           </div>
-        </div>
+        </Card>
       ))}
     </div>
   );

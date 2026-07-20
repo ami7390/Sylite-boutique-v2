@@ -1,7 +1,10 @@
 'use client'
 
 import React, { useState } from 'react'
+import { CheckCircle2, LoaderCircle, UploadCloud } from 'lucide-react'
 import { supabase } from '../lib/supabaseclient'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 
 export default function ImageUpload() {
   const [uploading, setUploading] = useState(false)
@@ -48,7 +51,7 @@ export default function ImageUpload() {
         throw dbError
       }
 
-      alert('Image et produit ajoutés avec succès à la base de données ! 🎉')
+      alert('Image et produit ajoutés avec succès à la base de données !')
 
     } catch (error: any) {
       alert(error.message || "Une erreur est survenue lors de l'envoi.")
@@ -59,24 +62,21 @@ export default function ImageUpload() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 p-6 border-2 border-dashed border-gray-300 rounded-lg">
-      <label className="cursor-pointer bg-black text-white px-4 py-2 rounded font-medium hover:bg-gray-800 transition">
-        {uploading ? 'Téléversement en cours...' : 'Sélectionner une image'}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={uploadFile}
-          disabled={uploading}
-          className="hidden"
-        />
-      </label>
+    <Card className="flex flex-col items-center gap-4 border-2 border-dashed border-neutral-300 p-6 shadow-none">
+      <Button asChild disabled={uploading}>
+        <label className="cursor-pointer">
+          {uploading ? <LoaderCircle className="size-4 animate-spin" /> : <UploadCloud className="size-4" />}
+          {uploading ? 'Téléversement en cours...' : 'Sélectionner une image'}
+          <input type="file" accept="image/*" onChange={uploadFile} disabled={uploading} className="hidden" />
+        </label>
+      </Button>
 
       {imageUrl && (
         <div className="mt-4 flex flex-col items-center">
-          <p className="text-sm text-green-600 mb-2">Aperçu de l'image insérée :</p>
+          <p className="mb-2 flex items-center gap-1.5 text-sm text-green-600"><CheckCircle2 className="size-4" /> Aperçu de l&apos;image insérée :</p>
           <img src={imageUrl} alt="Uploaded preview" className="w-48 h-48 object-cover rounded shadow" />
         </div>
       )}
-    </div>
+    </Card>
   )
 }
