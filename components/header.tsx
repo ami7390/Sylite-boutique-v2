@@ -50,12 +50,13 @@ export default function Header() {
   };
 
   // Liste centralisée des onglets pour automatiser l'activation des styles
-  const navLinks = [
-    { name: "Accueil", href: "/" },
-    { name: "Nouvel Arrivage", href: "/nouvel-arrivage" },
-    { name: "Collection", href: "/collection" },
-    { name: "Contact", href: "/contact" },
-  ];
+ const navLinks = [
+  { name: "Accueil", href: "/" },
+  { name: "Nouvel Arrivage", href: "/nouvel-arrivage" },
+  { name: "Collection", href: "/collection" },
+  { name: "Soins", href: "/soins" },
+  { name: "Contact", href: "/contact" },
+];
 
   return (
     <nav className="bg-white border-b border-neutral-100 sticky top-0 z-50">
