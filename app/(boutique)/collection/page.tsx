@@ -52,6 +52,7 @@ export default function CollectionPage() {
   const [viewCols, setViewCols] = useState<number>(3); 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState<boolean>(false);
   const [visibleCount, setVisibleCount] = useState<number>(8);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // États pour les données dynamiques de Supabase
   const [dbProducts, setDbProducts] = useState<DbProduct[]>([]);
@@ -73,6 +74,7 @@ export default function CollectionPage() {
   // Éviter les soucis d'hydratation SSR/CSR
   useEffect(() => {
     setIsMounted(true);
+    setSearchQuery(new URLSearchParams(window.location.search).get("search")?.trim() || "");
   }, []);
 
   // =========================================================================
@@ -166,6 +168,15 @@ export default function CollectionPage() {
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...normalizedCatalog];
 
+    if (searchQuery) {
+      const normalizedSearch = searchQuery.toLocaleLowerCase('fr');
+      result = result.filter((product) =>
+        `${product.name} ${product.category} ${product.tag || ''} ${product.badge || ''}`
+          .toLocaleLowerCase('fr')
+          .includes(normalizedSearch)
+      );
+    }
+
     if (selectedCategory !== "Tous") {
       result = result.filter(p => p.category === selectedCategory);
     }
@@ -191,7 +202,7 @@ export default function CollectionPage() {
     }
 
     return result;
-  }, [normalizedCatalog, selectedCategory, priceFilter, stockFilter, sortBy]);
+  }, [normalizedCatalog, selectedCategory, priceFilter, stockFilter, sortBy, searchQuery]);
 
   if (!isMounted) {
     return <div className="bg-neutral-50/60 min-h-screen animate-pulse" />;

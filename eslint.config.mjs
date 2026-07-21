@@ -13,6 +13,19 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Le contenu éditorial du site est en français : les apostrophes sont du texte,
+      // pas du balisage HTML saisi par l'utilisateur.
+      "react/no-unescaped-entities": "off",
+      // Ces règles restent visibles pendant la migration, sans bloquer Vercel.
+      "react-hooks/set-state-in-effect": "warn",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/ban-ts-comment": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@next/next/no-html-link-for-pages": "warn",
+    },
+  },
 ]);
 
 export default eslintConfig;

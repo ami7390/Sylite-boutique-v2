@@ -32,13 +32,10 @@ export default function OptionsDbClient() {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
-  const [isMounted, setIsMounted] = useState<boolean>(false);
 
   const defaultSizes = ["S", "M", "L", "XL", "XXL"];
 
   useEffect(() => {
-    setIsMounted(true);
-    
     const fetchProductDetails = async () => {
       if (!productId) {
         setLoading(false);
@@ -87,10 +84,6 @@ export default function OptionsDbClient() {
 
     return `https://wa.me/22394939380?text=${encodeURIComponent(message)}`;
   };
-
-  if (!isMounted) {
-    return <div className="bg-neutral-50 min-h-screen animate-pulse" />;
-  }
 
   if (loading) {
     return (

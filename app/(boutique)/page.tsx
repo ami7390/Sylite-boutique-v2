@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Flame, Headphones, ShieldCheck, Sparkles } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, Flame, Headphones, MessageCircle, ShieldCheck, Sparkles, Truck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export default function Home() {
@@ -11,8 +12,7 @@ export default function Home() {
   // =========================================================================
   const WHATSAPP_NUMBER = "22394939380";
   
-  // États pour les composants interactifs (FAQ et Guide des tailles)
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  // État pour le guide des tailles
   const [activeTabSize, setActiveTabSize] = useState<string>("gaines");
   
   // État du compte à rebours pour la Vente Flash
@@ -119,83 +119,88 @@ export default function Home() {
     },
   ];
 
-  const faqItems = [
-    { 
-      q: "Comment se déroule la commande et le paiement ?", 
-      a: "C'est ultra-simple ! Vous cliquez sur le bouton de l'article de votre choix, ce qui ouvre directement une conversation WhatsApp pré-remplie avec notre équipe. Nous validons ensemble votre taille/variante, puis vous payez à la livraison à Bamako ou via Orange Money / Moov Money." 
-    },
-    { 
-      q: "Quels sont les délais et tarifs de livraison ?", 
-      a: "Pour Bamako, la livraison est effectuée en général le jour même ou sous 24 heures maximum. Pour l'intérieur du Mali (Ségou, Sikasso, Kayes, Mopti etc.), nous expédions via les compagnies de transport partenaires sécurisées sous 48h." 
-    },
-    { 
-      q: "Les articles en stock sont-ils authentiques et fidèles aux photos ?", 
-      a: "Oui, absolument. Nous attachons un soin premium à la sélection de nos textiles, lingeries et diffuseurs. Les visuels correspondent exactement aux finitions réelles. Sur simple demande WhatsApp, nos conseillers peuvent d'ailleurs vous transmettre de courtes vidéos réelles des modèles en stock avant expédition." 
-    },
-    { 
-      q: "Puis-je modifier ma commande ou faire un échange ?", 
-      a: "Tant que le colis n'est pas expédié, vous pouvez modifier votre commande directement sur WhatsApp. Pour des raisons d'hygiène évidents, les articles de lingerie fine et gaines ne sont ni repris ni échangés une fois portés. Pour le prêt-à-porter, contactez notre support sous 24h après réception." 
-    },
-  ];
-
   return (
     <div className="bg-neutral-50/60 min-h-screen selection:bg-purple-500 selection:text-white">
       
       {/* ================= HERO SECTION ================= */}
-      <section className="relative bg-gradient-to-br from-neutral-950 via-neutral-900 to-purple-950 text-white overflow-visible py-24 sm:py-32 lg:pb-0 lg:pt-32">
-        <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:32px_32px]"></div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-          <div className="max-w-2xl lg:max-w-none pb-12 lg:pb-32 text-center lg:text-left">
-            <span className="inline-flex items-center py-1 px-3 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-4 tracking-wide uppercase">
-              Nouvelle Collection Disponible
-            </span>
-            <h1 className="text-4xl sm:text-6xl font-serif tracking-wide text-white mb-6 leading-tight">
-               Élégance Moderne.<br />
-              <span className="bg-gradient-to-r from-purple-400 to-fuchsia-300 bg-clip-text text-transparent italic">Définie.</span>
+      <section className="relative isolate overflow-hidden bg-neutral-950 text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(147,51,234,0.22),transparent_34%),radial-gradient(circle_at_82%_70%,rgba(217,70,239,0.14),transparent_30%)]" />
+        <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.25)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.25)_1px,transparent_1px)] [background-size:48px_48px]" />
+
+        <div className="relative mx-auto grid min-h-[720px] max-w-7xl items-center gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-16">
+          <div className="z-20 max-w-xl text-center lg:text-left">
+            <Badge className="mb-6 rounded-full border border-purple-400/30 bg-purple-400/10 px-3.5 py-1.5 text-[11px] uppercase tracking-[0.2em] text-purple-200">
+              <Sparkles className="mr-2 size-3.5" aria-hidden="true" />
+              Nouvelle collection 2026
+            </Badge>
+
+            <h1 className="text-balance font-serif text-5xl font-medium leading-[0.98] tracking-[-0.035em] text-white sm:text-6xl xl:text-7xl">
+              Votre style.
+              <span className="mt-2 block bg-gradient-to-r from-purple-300 via-fuchsia-300 to-purple-400 bg-clip-text italic text-transparent">
+                Votre signature.
+              </span>
             </h1>
-            <p className="text-base sm:text-lg text-neutral-300 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light">
-              Révélez votre éclat unique. Découvrez nos ensembles chic, lingerie sculptante, voiles de haute qualité et essentiels bien-être pensés exclusivement pour la femme moderne.
+
+            <p className="mx-auto mt-7 max-w-lg text-pretty text-base leading-7 text-neutral-300 sm:text-lg lg:mx-0">
+              Mode, silhouettes sculptées et rituels bien-être sélectionnés pour révéler une élégance qui vous ressemble.
             </p>
-            <div className="flex justify-center lg:justify-start gap-4">
-              <a href="/collection" className="px-6 py-3.5 text-sm font-semibold rounded-xl bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-600/30 transition-all transform hover:-translate-y-0.5 z-20 relative">
-                Découvrir la Collection
-              </a>
+
+            <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
+              <Link href="/collection" className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-purple-600 px-6 text-sm font-semibold text-white shadow-[0_16px_40px_-14px_rgba(147,51,234,.9)] transition hover:-translate-y-0.5 hover:bg-purple-500">
+                Explorer la collection
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </Link>
+              <Link href="/soins" className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 text-sm font-semibold text-white backdrop-blur transition hover:border-white/40 hover:bg-white/10">
+                Découvrir les soins
+              </Link>
+            </div>
+
+            <div className="mt-9 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs text-neutral-300 lg:justify-start">
+              <span className="inline-flex items-center gap-2"><Truck className="size-4 text-purple-300" /> Livraison rapide</span>
+              <span className="inline-flex items-center gap-2"><ShieldCheck className="size-4 text-purple-300" /> Achat accompagné</span>
+              <span className="inline-flex items-center gap-2"><MessageCircle className="size-4 text-purple-300" /> Conseil WhatsApp</span>
             </div>
           </div>
-          <div className="hidden lg:block h-[500px]"></div>
-        </div>
-        
-        {/* DEUX IMAGES SUPERPOSÉES STYLE LOOKBOOK DE MODE */}
-        <div className="absolute bottom-0 right-0 z-10 hidden lg:block w-[50%] h-full max-h-[100%] overflow-visible">
-          
-          {/* Image Principale Arrière-plan (ouverture.png) */}
-          <div className="absolute inset-0 w-full h-full overflow-hidden">
-            <Image 
-              src="/ouverture.png"
-              alt="Boutique de mode en ligne et articles de bien-être pour femme"
-              layout="fill"
-              objectFit="cover"
-              objectPosition="bottom right"
-              priority
-              quality={100}
-              unoptimized
-            />
-          </div>
 
-          {/* Deuxième Image Flottante Avant-plan - AGRANDIE ICI (w-64 h-80 au lieu de w-56 h-72) */}
-          <div className="absolute bottom-12 left-6 w-64 h-80 rounded-2xl overflow-hidden border-4 border-neutral-950 shadow-2xl transform -rotate-2 hover:rotate-0 transition-transform duration-300">
-            <Image 
-              src="/ouverture-1.png"
-              alt="Focus Collection Sylite"
-              layout="fill"
-              objectFit="cover"
-              priority
-            />
-          </div>
+          <div className="relative mx-auto h-[500px] w-full max-w-[620px] sm:h-[610px] lg:h-[650px]">
+            <div className="absolute inset-x-6 inset-y-0 overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-900 shadow-2xl sm:left-14 sm:right-0">
+              <Image
+                src="/ouverture.png"
+                alt="Sélection mode et bien-être SyLite"
+                fill
+                priority
+                sizes="(max-width: 1024px) 90vw, 52vw"
+                className="object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/65 via-transparent to-purple-950/10" />
+            </div>
 
+            <div className="absolute bottom-6 left-0 h-48 w-36 overflow-hidden rounded-[1.4rem] border border-white/20 bg-neutral-900 shadow-2xl sm:bottom-10 sm:h-72 sm:w-52">
+              <Image
+                src="/ouverture-1.png"
+                alt="Détail de la collection SyLite"
+                fill
+                priority
+                sizes="(max-width: 640px) 144px, 208px"
+                className="object-cover"
+              />
+            </div>
+
+            <div className="absolute bottom-7 right-2 max-w-[210px] rounded-2xl border border-white/15 bg-neutral-950/75 p-4 shadow-xl backdrop-blur-xl sm:bottom-12 sm:right-5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-purple-300">Sélection SyLite</p>
+              <p className="mt-1 text-sm font-medium text-white">Des pièces choisies avec soin, disponibles à Bamako.</p>
+            </div>
+          </div>
         </div>
-        <div className="absolute top-1/2 right-10 -translate-y-1/2 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl hidden lg:block z-0" />
+
+        <div className="relative z-20 border-t border-white/10 bg-white/[0.035]">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-10 gap-y-3 px-4 py-4 text-[11px] font-medium uppercase tracking-[0.16em] text-neutral-400 sm:px-6 lg:px-8">
+            <span>Mode féminine</span><span className="text-purple-500">✦</span>
+            <span>Lingerie</span><span className="text-purple-500">✦</span>
+            <span>Bien-être</span><span className="text-purple-500">✦</span>
+            <span>Maison</span>
+          </div>
+        </div>
       </section>
 
       {/* ================= BENTO GRID DES UNIVERS CATÉGORIES ================= */}
