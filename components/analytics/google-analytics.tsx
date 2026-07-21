@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
 
@@ -15,35 +15,48 @@ const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 export function GoogleAnalytics() {
   const pathname = usePathname();
-  const [isReady, setIsReady] = useState(false);
+  const previousPathname = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!measurementId || !isReady || typeof window.gtag !== "function") return;
+    if (previousPathname.current === null) {
+      previousPathname.current = pathname;
+      return;
+    }
+
+    if (
+      !measurementId ||
+      pathname === previousPathname.current ||
+      typeof window.gtag !== "function"
+    ) {
+      return;
+    }
+
+    previousPathname.current = pathname;
 
     window.gtag("event", "page_view", {
       page_title: document.title,
       page_location: window.location.href,
       page_path: `${pathname}${window.location.search}`,
     });
-  }, [isReady, pathname]);
+  }, [pathname]);
 
   if (!measurementId) return null;
 
   return (
     <>
+      <Script id="sylite-google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function(){window.dataLayer.push(arguments);};
+          window.gtag('js', new Date());
+          window.gtag('config', '${measurementId}', {
+            anonymize_ip: true
+          });
+        `}
+      </Script>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
         strategy="afterInteractive"
-        onLoad={() => {
-          window.dataLayer = window.dataLayer || [];
-          window.gtag = (...args: unknown[]) => window.dataLayer.push(args);
-          window.gtag("js", new Date());
-          window.gtag("config", measurementId, {
-            send_page_view: false,
-            anonymize_ip: true,
-          });
-          setIsReady(true);
-        }}
       />
     </>
   );
