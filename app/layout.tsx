@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css"; // On garde impérativement les styles Tailwind globaux ici
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-full flex flex-col bg-neutral-950 antialiased`}>
         
         {children} {/* C'est ici que s'injectera soit la boutique, soit la maintenance */}
+        <GoogleAnalytics />
         
       </body>
     </html>
