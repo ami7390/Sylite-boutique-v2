@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Edit3, Inbox, KeyRound, LoaderCircle, LogOut, MessageSquare, Package, RefreshCw, Save, Sparkles, Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabaseclient";
 import { notifyProductsChanged } from "@/lib/product-sync";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -49,7 +48,7 @@ export default function AdminDashboardPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Clé unique pour réinitialiser de force le champ d'upload HTML
-  const [fileInputKey, setFileInputKey] = useState(Date.now());
+  const [fileInputKey, setFileInputKey] = useState(0);
   
   // État de modification typé
   const [editingProductId, setEditingProductId] = useState<string | number | null>(null);
@@ -78,16 +77,16 @@ export default function AdminDashboardPage() {
     checkUser();
   }, []);
 
-  const loadProducts = async () => {
+  async function loadProducts() {
     const { data, error } = await supabase.from("products").select("*").order("id", { ascending: false });
     if (error) {
       console.error("Erreur chargement produits:", error.message);
       return;
     }
     if (data) setProducts(data as Product[]);
-  };
+  }
 
-  const loadMessages = async () => {
+  async function loadMessages() {
     setLoadingMessages(true);
     const { data, error } = await supabase.from("messages").select("*").order("created_at", { ascending: false });
     if (error) {
@@ -97,7 +96,7 @@ export default function AdminDashboardPage() {
     }
     if (data) setMessages(data as CustomerMessage[]);
     setLoadingMessages(false);
-  };
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,7 +137,7 @@ export default function AdminDashboardPage() {
     setProdPrice("");
     setProdCategory("");
     setProdImageUrl("");
-    setFileInputKey(Date.now());
+    setFileInputKey((current) => current + 1);
   };
 
   const handleSaveProduct = async (e: React.MouseEvent<HTMLButtonElement> | React.FormEvent) => {

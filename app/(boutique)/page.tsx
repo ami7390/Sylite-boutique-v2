@@ -335,7 +335,7 @@ export default function Home() {
                 <div className="mt-4 pt-3 border-t border-neutral-50">
                   <div className="text-base font-bold text-neutral-900 mb-3">{product.price}</div>
                   <a 
-                    href={`/options?id=${product.id}`}
+                    href={`/produits/${product.id}`}
                     className="w-full inline-flex justify-center items-center px-4 py-2 text-xs font-semibold rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition-all shadow-sm shadow-purple-600/10 z-20 relative"
                   >
                     Voir les options d'articles
@@ -469,7 +469,7 @@ export default function Home() {
                     <div className="flex justify-between items-center">
                       <span className="text-base font-semibold tracking-wider text-neutral-200">{model.price}</span>
                       <a 
-                        href={`/options?id=${model.id}`}
+                        href={`/produits/${model.id}`}
                         className="text-xs font-medium text-purple-400 group-hover:text-purple-300 inline-flex items-center gap-1 transition-all"
                       >
                         Voir les options <span className="group-hover:translate-x-0.5 transition-transform">→</span>

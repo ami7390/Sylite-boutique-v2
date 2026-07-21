@@ -10,6 +10,7 @@ import { subscribeToProductChanges } from '@/lib/product-sync';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
+import { normalizeSearch } from '@/lib/products';
 
 // Interface produit standardisée
 interface Product {
@@ -31,14 +32,14 @@ interface NormalizedProduct extends Product {
 
 interface DbProduct {
   id: number | string;
-  name?: string;
-  category?: string;
-  image_url?: string;
-  image?: string;
-  price?: number | string;
-  tag?: string;
-  badge?: string;
-  in_stock?: boolean;
+  name?: string | null;
+  category?: string | null;
+  image_url?: string | null;
+  image?: string | null;
+  price?: number | string | null;
+  tag?: string | null;
+  badge?: string | null;
+  in_stock?: boolean | null;
 }
 
 export default function CollectionPage() {
@@ -147,7 +148,7 @@ export default function CollectionPage() {
         displayPrice: formattedPrice,
         tag: p.tag || p.badge || '',
         badge: p.badge || '',
-        inStock: p.in_stock !== undefined ? p.in_stock : true
+        inStock: p.in_stock !== false
       };
     });
 
@@ -169,10 +170,9 @@ export default function CollectionPage() {
     let result = [...normalizedCatalog];
 
     if (searchQuery) {
-      const normalizedSearch = searchQuery.toLocaleLowerCase('fr');
+      const normalizedSearch = normalizeSearch(searchQuery);
       result = result.filter((product) =>
-        `${product.name} ${product.category} ${product.tag || ''} ${product.badge || ''}`
-          .toLocaleLowerCase('fr')
+        normalizeSearch(`${product.name} ${product.category} ${product.tag || ''} ${product.badge || ''}`)
           .includes(normalizedSearch)
       );
     }
@@ -251,7 +251,7 @@ export default function CollectionPage() {
               <SlidersHorizontal className="size-4" /> Filtrer et Trier
             </Button>
             <div className="hidden lg:flex items-center gap-1.5 text-neutral-500 font-medium">
-              <TrendingUp className="size-4" /> <span className="text-neutral-800 font-bold">{filteredAndSortedProducts.length}</span> modèles trouvés
+              <TrendingUp className="size-4" /> <span className="text-neutral-800 font-bold">{filteredAndSortedProducts.length}</span> modèle{filteredAndSortedProducts.length > 1 ? "s" : ""} trouvé{filteredAndSortedProducts.length > 1 ? "s" : ""}{searchQuery && <> pour « {searchQuery} »</>}
             </div>
           </div>
 
@@ -342,7 +342,7 @@ export default function CollectionPage() {
               <div className="bg-white rounded-2xl border border-neutral-200/60 p-16 text-center max-w-xl mx-auto my-10 space-y-4">
                 <Search className="mx-auto size-8 text-purple-600" />
                 <h3 className="text-base font-bold text-neutral-800">Aucun modèle ne correspond à vos filtres</h3>
-                <button onClick={() => { setSelectedCategory("Tous"); setPriceFilter("Tous"); setStockFilter(false); }} className="px-4 py-2 bg-neutral-950 text-white rounded-xl text-xs font-semibold hover:bg-neutral-800 transition-colors">
+                <button onClick={() => { setSelectedCategory("Tous"); setPriceFilter("Tous"); setStockFilter(false); setSearchQuery(""); window.history.replaceState(null, "", "/collection"); }} className="px-4 py-2 bg-neutral-950 text-white rounded-xl text-xs font-semibold hover:bg-neutral-800 transition-colors">
                   Réinitialiser les filtres
                 </button>
               </div>
@@ -389,7 +389,7 @@ export default function CollectionPage() {
                         
                         {/* LIEN DYNAMIQUE UNIQUE VERS OPTIONS-DB OU OPTIONS */}
                         <Link 
-                          href={String(product.id).startsWith('db-') ? `/options-db?id=${product.originalId}` : `/options?id=${product.originalId}`} 
+                          href={`/produits/${product.originalId}`}
                           className="inline-flex justify-center items-center px-3 py-1.5 text-[10px] sm:text-xs font-semibold rounded-lg bg-neutral-950 text-white hover:bg-purple-600 transition-all shadow-sm z-10 relative"
                         >
                           Options
@@ -508,7 +508,7 @@ export default function CollectionPage() {
                   
                   {/* LIEN DYNAMIQUE UNIQUE SÉCURISÉ POUR LES RECOMMANDATIONS */}
                   <Link 
-                    href={String(product.id).startsWith('db-') ? `/options-db?id=${product.originalId}` : `/options?id=${product.originalId}`} 
+                    href={`/produits/${product.originalId}`}
                     className="text-[10px] font-bold text-purple-600 bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-md transition-all cursor-pointer z-10 relative"
                   >
                     Voir ›

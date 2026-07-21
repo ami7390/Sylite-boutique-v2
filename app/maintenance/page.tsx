@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
+import { createWhatsAppUrl } from '@/lib/store-config';
 
 export default function Maintenance() {
-  // Configurer le numéro WhatsApp au format international (Ex: +223...)
-  const WHATSAPP_NUMBER = "22373904319"; 
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [progress, setProgress] = useState(10);
@@ -122,7 +121,7 @@ export default function Maintenance() {
               <p className="text-[11px] text-neutral-500 font-light mt-0.5">Un coup de cœur ou une commande urgente ? Notre équipe reste à votre écoute.</p>
             </div>
             <a 
-              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Bonjour SYLITE, je souhaite entrer en contact avec le service client pendant la maintenance du site.")}`}
+              href={createWhatsAppUrl("Bonjour SYLITE, je souhaite entrer en contact avec le service client pendant la maintenance du site.")}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-neutral-950 hover:bg-neutral-900 text-neutral-300 border border-neutral-800 text-xs font-medium rounded-xl transition-all duration-300 whitespace-nowrap"

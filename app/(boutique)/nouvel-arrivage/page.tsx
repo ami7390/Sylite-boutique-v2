@@ -332,9 +332,7 @@ function ProductGridWithProps({ filterCategory, refreshKey, onProductDeleted, sh
         const whatsappMessage = `Bonjour SYLITE, je souhaite commander l'article suivant :\n\n- *Produit :* ${product.name}\n- *Prix :* ${formattedPrice}\n\nEst-il disponible ?`;
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
         
-        const optionsUrl = isDbProduct
-          ? `/options-db?id=${product.originalId}`
-          : `/options?id=${product.originalId}`;
+        const optionsUrl = `/produits/${product.originalId}`;
         
         // Sécurité image manquante ici aussi
         const finalGridImage = product.image_url || product.image || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600";

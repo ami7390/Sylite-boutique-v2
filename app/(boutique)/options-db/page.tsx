@@ -1,18 +1,6 @@
-import { Suspense } from "react";
-import OptionsDbClient from "./OptionsDbClient";
-import { Skeleton } from "@/components/ui/skeleton";
+import { redirect } from "next/navigation";
 
-export default function OptionsDbPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="mx-auto grid min-h-screen max-w-5xl grid-cols-1 gap-8 px-4 py-10 md:grid-cols-2">
-          <Skeleton className="min-h-[520px]" />
-          <div className="space-y-4"><Skeleton className="h-8 w-3/4" /><Skeleton className="h-12 w-1/3" /><Skeleton className="h-48" /></div>
-        </div>
-      }
-    >
-      <OptionsDbClient />
-    </Suspense>
-  );
+export default async function LegacyDatabaseOptionsPage({ searchParams }: { searchParams: Promise<{ id?: string }> }) {
+  const { id } = await searchParams;
+  redirect(id ? `/produits/${id}` : "/collection");
 }

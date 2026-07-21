@@ -9,6 +9,7 @@ import { Menu, Minus, Plus, Search, ShoppingBag, Trash2, X } from 'lucide-react'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { createWhatsAppUrl } from '@/lib/store-config';
 
 // IMPORTATION : On écoute les données de notre panier global
 import { useCart } from '../app/(boutique)/context/cartcontext';
@@ -55,14 +56,7 @@ export default function Header() {
     textCommande += `\n➡ *Montant Total : ${totalGlobal.toLocaleString()} FCFA*`;
     textCommande += "\n\nMerci de me confirmer la disponibilité et les modalités de livraison !";
 
-    // 2. On encode le message pour les liens web
-    const messageEncode = encodeURIComponent(textCommande);
-
-    // 3. Numéro WhatsApp officiel de la boutique
-    const numeroWhatsApp = "22373904319"; 
-
-    // 4. On ouvre la fenêtre WhatsApp
-    window.open(`https://wa.me/${numeroWhatsApp}?text=${messageEncode}`, '_blank', 'noopener,noreferrer');
+    window.open(createWhatsAppUrl(textCommande), '_blank', 'noopener,noreferrer');
   };
 
   // Liste centralisée des onglets pour automatiser l'activation des styles
@@ -71,6 +65,7 @@ export default function Header() {
     { name: "Nouvel Arrivage", href: "/nouvel-arrivage" },
     { name: "Collection", href: "/collection" },
     { name: "Soins", href: "/soins" },
+    { name: "Électroménager", href: "/electromenager" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -94,7 +89,7 @@ export default function Header() {
           </div>
 
           {/* Navigation - Liens Principaux (Desktop Dynamique) */}
-          <div className="hidden md:flex space-x-8 text-sm font-medium h-full items-center">
+          <div className="hidden h-full items-center gap-5 text-sm font-medium lg:flex xl:gap-7">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -114,8 +109,8 @@ export default function Header() {
           </div>
 
           {/* Barre de Recherche et Utilitaires (Desktop) */}
-          <div className="hidden md:flex items-center space-x-4">
-            <form className="relative" role="search" onSubmit={handleSearch}>
+          <div className="hidden items-center space-x-3 lg:flex">
+            <form className="relative hidden xl:block" role="search" onSubmit={handleSearch}>
               <Input
                 type="text"
                 placeholder="Rechercher une pièce..."
@@ -151,7 +146,7 @@ export default function Header() {
           </div>
 
           {/* Barre d'utilitaires et Menu Mobile */}
-          <div className="md:hidden flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
             
             {/* ESPACE COMPTE ACCESSIBLE SUR MOBILE ÉGALEMENT */}
             <UserMenu />
@@ -190,7 +185,7 @@ export default function Header() {
 
       {/* Menu Déroulant Onglets (Mobile Dynamique) */}
       {isOpen && (
-        <div className="md:hidden bg-white border-t border-neutral-100 px-4 pt-2 pb-4 space-y-2 shadow-inner">
+        <div className="bg-white border-t border-neutral-100 px-4 pt-2 pb-4 space-y-2 shadow-inner lg:hidden">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -244,9 +239,13 @@ export default function Header() {
                 {cartItems.map((item) => (
                   <article key={String(item.id)} className="rounded-2xl border border-neutral-200 p-4">
                     <div className="flex items-start justify-between gap-3">
-                      <div>
+                      <div className="flex min-w-0 gap-3">
+                        {item.image && <div className="relative size-14 shrink-0 overflow-hidden rounded-xl bg-neutral-100"><Image src={item.image} alt="" fill sizes="56px" className="object-cover" /></div>}
+                        <div className="min-w-0">
                         <h3 className="text-sm font-semibold text-neutral-900">{item.name}</h3>
                         <p className="mt-1 text-sm font-bold text-purple-700">{item.price.toLocaleString('fr-FR')} FCFA</p>
+                        {(item.size || item.color) && <p className="mt-1 text-[11px] text-neutral-500">{[item.size, item.color].filter(Boolean).join(" • ")}</p>}
+                        </div>
                       </div>
                       <button type="button" onClick={() => removeFromCart(item.id)} aria-label={`Supprimer ${item.name}`} className="rounded-lg p-2 text-neutral-400 hover:bg-red-50 hover:text-red-600"><Trash2 className="size-4" /></button>
                     </div>

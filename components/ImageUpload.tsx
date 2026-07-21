@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 import { CheckCircle2, LoaderCircle, UploadCloud } from 'lucide-react'
 import { supabase } from '../lib/supabaseclient'
 import { Button } from '@/components/ui/button'
@@ -38,7 +39,7 @@ export default function ImageUpload() {
       setImageUrl(publicUrl)
 
       // 3. Force le passage sans typage strict pour ignorer l'ancien schéma local
-      const { error: dbError } = await (supabase as any)
+      const { error: dbError } = await supabase
         .from('products')
         .insert({
           name: "Nouvel Article Chic",
@@ -53,8 +54,8 @@ export default function ImageUpload() {
 
       alert('Image et produit ajoutés avec succès à la base de données !')
 
-    } catch (error: any) {
-      alert(error.message || "Une erreur est survenue lors de l'envoi.")
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Une erreur est survenue lors de l'envoi.")
       console.error("Détails de l'erreur :", error)
     } finally {
       setUploading(false)
@@ -74,7 +75,7 @@ export default function ImageUpload() {
       {imageUrl && (
         <div className="mt-4 flex flex-col items-center">
           <p className="mb-2 flex items-center gap-1.5 text-sm text-green-600"><CheckCircle2 className="size-4" /> Aperçu de l&apos;image insérée :</p>
-          <img src={imageUrl} alt="Uploaded preview" className="w-48 h-48 object-cover rounded shadow" />
+          <div className="relative size-48 overflow-hidden rounded shadow"><Image src={imageUrl} alt="Aperçu du produit téléversé" fill sizes="192px" className="object-cover" /></div>
         </div>
       )}
     </Card>

@@ -1,0 +1,5 @@
+import Link from "next/link";
+
+export default function MentionsLegalesPage() {
+  return <main className="min-h-screen bg-neutral-50 px-4 py-16"><article className="mx-auto max-w-3xl rounded-3xl border bg-white p-6 shadow-sm sm:p-10"><p className="text-xs font-bold uppercase tracking-widest text-purple-600">Informations</p><h1 className="mt-3 font-serif text-4xl text-neutral-950">Mentions légales</h1><div className="mt-8 space-y-6 text-sm leading-7 text-neutral-600"><section><h2 className="font-bold text-neutral-900">Éditeur</h2><p>SyLite, boutique de mode, soins et maison basée à Bamako, Mali. Les informations administratives complètes peuvent être demandées via notre page de contact.</p></section><section><h2 className="font-bold text-neutral-900">Hébergement</h2><p>Le site est déployé sur l’infrastructure Vercel. Les données commerciales sont hébergées avec Supabase.</p></section><section><h2 className="font-bold text-neutral-900">Contact</h2><p>Pour toute question relative au site ou à vos données, utilisez la <Link className="text-purple-600 underline" href="/contact">page de contact</Link>.</p></section></div></article></main>;
+}

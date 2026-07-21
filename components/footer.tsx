@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Camera, MapPin, ThumbsUp } from 'lucide-react';
 
 export default function Footer() {
@@ -28,11 +29,12 @@ export default function Footer() {
           <div>
             <h3 className="text-white text-sm font-semibold mb-4 uppercase tracking-wider">Navigation</h3>
             <ul className="space-y-2 text-xs">
-              <li><a href="/" className="hover:text-purple-400 transition-colors">Accueil</a></li>
-              <li><a href="/nouvel-arrivage" className="hover:text-purple-400 transition-colors">Nouvel Arrivage</a></li>
-              <li><a href="/collection" className="hover:text-purple-400 transition-colors">Collection</a></li>
-              <li><a href="/soins" className="hover:text-purple-400 transition-colors">Soins</a></li>
-              <li><a href="/contact" className="hover:text-purple-400 transition-colors">Contact</a></li>
+              <li><Link href="/" className="hover:text-purple-400 transition-colors">Accueil</Link></li>
+              <li><Link href="/nouvel-arrivage" className="hover:text-purple-400 transition-colors">Nouvel Arrivage</Link></li>
+              <li><Link href="/collection" className="hover:text-purple-400 transition-colors">Collection</Link></li>
+              <li><Link href="/soins" className="hover:text-purple-400 transition-colors">Soins</Link></li>
+              <li><Link href="/electromenager" className="hover:text-purple-400 transition-colors">Électroménager</Link></li>
+              <li><Link href="/contact" className="hover:text-purple-400 transition-colors">Contact</Link></li>
             </ul>
           </div>
 

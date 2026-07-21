@@ -5,6 +5,7 @@ import { BriefcaseBusiness, Check, ChevronDown, Clock3, FileText, MapPin, Messag
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { createWhatsAppUrl } from '@/lib/store-config';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -29,10 +30,8 @@ export default function ContactPage() {
 
   const handleWhatsAppSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const whatsappNumber = "+22373904319"; 
     const text = `Bonjour, je souhaite vous contacter via le site.\n\n*Nom complet :* ${formData.name}\n*Sujet :* ${formData.subject}\n*Message :* ${formData.message}`;
-    const encodedText = encodeURIComponent(text);
-    window.open(`https://wa.me/${whatsappNumber}?text=${encodedText}`, '_blank');
+    window.open(createWhatsAppUrl(text), '_blank', 'noopener,noreferrer');
   };
 
   return (

@@ -39,7 +39,82 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      products: {
+        Row: {
+          id: string | number
+          name: string | null
+          price: number | string | null
+          category: string | null
+          image_url: string | null
+          image: string | null
+          description: string | null
+          badge: string | null
+          tag: string | null
+          in_stock: boolean | null
+          created_at: string | null
+          source_id: string | null
+        }
+        Insert: {
+          id?: string | number
+          name: string
+          price: number | string
+          category: string
+          image_url?: string | null
+          image?: string | null
+          description?: string | null
+          badge?: string | null
+          tag?: string | null
+          in_stock?: boolean | null
+          created_at?: string | null
+          source_id?: string | null
+        }
+        Update: {
+          name?: string
+          price?: number | string
+          category?: string
+          image_url?: string | null
+          image?: string | null
+          description?: string | null
+          badge?: string | null
+          tag?: string | null
+          in_stock?: boolean | null
+          created_at?: string | null
+          source_id?: string | null
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          id: string
+          name: string
+          email: string | null
+          phone: string | null
+          subject: string | null
+          message: string
+          is_read: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          email?: string | null
+          phone?: string | null
+          subject?: string | null
+          message: string
+          is_read?: boolean
+          created_at?: string
+        }
+        Update: {
+          name?: string
+          email?: string | null
+          phone?: string | null
+          subject?: string | null
+          message?: string
+          is_read?: boolean
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
