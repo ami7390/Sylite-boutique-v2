@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { createWhatsAppUrl } from "@/lib/store-config";
-import { formatPrice, type StoreProduct } from "@/lib/products";
+import { formatPrice, numericPrice, type StoreProduct } from "@/lib/products";
+import { trackAnalyticsEvent } from "@/components/analytics/google-analytics";
 
 interface ProductCardProps {
   product: StoreProduct;
@@ -18,6 +19,13 @@ interface ProductCardProps {
 
 export function ProductCard({ product, liked = false, onLike, priority = false }: ProductCardProps) {
   const message = `Bonjour SyLite, je souhaite commander :\n\n• Produit : ${product.name}\n• Prix : ${formatPrice(product.price)}\n• Référence : ${product.id}\n\nPouvez-vous confirmer la disponibilité et la livraison ?`;
+  const price = numericPrice(product.price);
+  const trackWhatsAppLead = () => trackAnalyticsEvent("generate_lead", {
+    currency: "XOF",
+    value: price,
+    lead_source: "whatsapp_product_card",
+    items: [{ item_id: String(product.id), item_name: product.name, item_category: product.category, price, quantity: 1 }],
+  });
 
   return (
     <Card className="group overflow-hidden rounded-2xl border-neutral-200/80 bg-white p-0 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-purple-200 hover:shadow-xl">
@@ -37,7 +45,7 @@ export function ProductCard({ product, liked = false, onLike, priority = false }
         </div>
         <div className="grid grid-cols-2 gap-2">
           <Button asChild variant="outline" size="sm"><Link href={`/produits/${product.id}`}><ShoppingBag className="size-4" /> Détails</Link></Button>
-          <Button asChild variant="whatsapp" size="sm" disabled={!product.inStock}><a href={createWhatsAppUrl(message)} target="_blank" rel="noopener noreferrer"><MessageCircle className="size-4" /> WhatsApp</a></Button>
+          <Button asChild variant="whatsapp" size="sm" disabled={!product.inStock}><a href={createWhatsAppUrl(message)} target="_blank" rel="noopener noreferrer" onClick={trackWhatsAppLead}><MessageCircle className="size-4" /> WhatsApp</a></Button>
         </div>
       </div>
     </Card>

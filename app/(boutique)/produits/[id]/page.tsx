@@ -12,6 +12,7 @@ import { useCart } from "../../context/cartcontext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { trackAnalyticsEvent } from "@/components/analytics/google-analytics";
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -32,6 +33,16 @@ export default function ProductPage() {
 
   useEffect(() => { void loadProduct(); }, [id]);
 
+  useEffect(() => {
+    if (!product) return;
+    const price = numericPrice(product.price);
+    trackAnalyticsEvent("view_item", {
+      currency: "XOF",
+      value: price,
+      items: [{ item_id: String(product.id), item_name: product.name, item_category: product.category, price, quantity: 1 }],
+    });
+  }, [product]);
+
   if (loading) return <div className="mx-auto grid min-h-[70vh] max-w-6xl gap-8 px-4 py-10 md:grid-cols-2"><Skeleton className="min-h-[560px]" /><Skeleton className="min-h-[460px]" /></div>;
   if (error || !product) return <div className="flex min-h-[65vh] flex-col items-center justify-center px-4 text-center"><PackageX className="size-10 text-purple-600" /><h1 className="mt-4 text-xl font-bold">Produit indisponible</h1><p className="mt-2 text-sm text-neutral-500">{error}</p><div className="mt-6 flex gap-3"><Button onClick={() => void loadProduct()}><RefreshCw className="size-4" /> Réessayer</Button><Button asChild variant="outline"><Link href="/collection"><ArrowLeft className="size-4" /> Collection</Link></Button></div></div>;
 
@@ -49,7 +60,7 @@ export default function ProductPage() {
           <p className="mt-6 leading-7 text-neutral-600">{product.description || "Une pièce sélectionnée avec soin par SyLite pour son style, son confort et sa qualité."}</p>
           <div className="mt-6 grid gap-3 border-y border-neutral-100 py-5 text-sm sm:grid-cols-3"><span className="flex items-center gap-2"><Truck className="size-4 text-purple-600" /> Livraison rapide</span><span className="flex items-center gap-2"><ShieldCheck className="size-4 text-purple-600" /> Achat accompagné</span><span className="flex items-center gap-2"><Check className="size-4 text-emerald-600" /> {product.inStock ? "En stock" : "Indisponible"}</span></div>
           <div className="mt-6 flex items-center justify-between"><span className="text-sm font-semibold">Quantité</span><div className="flex items-center rounded-full border"><button className="p-3" onClick={() => setQuantity((value) => Math.max(1, value - 1))} aria-label="Diminuer"><Minus className="size-4" /></button><span className="w-8 text-center font-bold">{quantity}</span><button className="p-3" onClick={() => setQuantity((value) => value + 1)} aria-label="Augmenter"><Plus className="size-4" /></button></div></div>
-          <div className="mt-7 grid gap-3 sm:grid-cols-2"><Button variant="outline" size="lg" disabled={!product.inStock} onClick={() => addToCart({ id: product.id, name: product.name, price: numericPrice(product.price), quantity, image: product.image })}>Ajouter au panier</Button><Button asChild variant="whatsapp" size="lg" disabled={!product.inStock}><a href={createWhatsAppUrl(message)} target="_blank" rel="noopener noreferrer"><MessageCircle className="size-4" /> Commander</a></Button></div>
+          <div className="mt-7 grid gap-3 sm:grid-cols-2"><Button variant="outline" size="lg" disabled={!product.inStock} onClick={() => addToCart({ id: product.id, name: product.name, price: numericPrice(product.price), quantity, image: product.image, category: product.category })}>Ajouter au panier</Button><Button asChild variant="whatsapp" size="lg" disabled={!product.inStock}><a href={createWhatsAppUrl(message)} target="_blank" rel="noopener noreferrer" onClick={() => trackAnalyticsEvent("generate_lead", { currency: "XOF", value: numericPrice(product.price) * quantity, lead_source: "whatsapp_product_page", items: [{ item_id: String(product.id), item_name: product.name, item_category: product.category, price: numericPrice(product.price), quantity }] })}><MessageCircle className="size-4" /> Commander</a></Button></div>
           <p className="mt-4 text-center text-xs text-neutral-500">La disponibilité, la livraison et les modalités d’échange sont confirmées par notre équipe avant validation.</p>
         </section>
       </main>

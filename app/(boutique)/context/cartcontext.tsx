@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { trackAnalyticsEvent } from "@/components/analytics/google-analytics";
 
 export interface CartItem {
   id: string | number;
@@ -8,6 +9,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   image?: string;
+  category?: string;
   size?: string;
   color?: string;
 }
@@ -44,6 +46,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const addToCart = useCallback((product: Omit<CartItem, "quantity"> & { quantity?: number }) => {
     const requestedQuantity = Math.max(1, product.quantity ?? 1);
+    trackAnalyticsEvent("add_to_cart", {
+      currency: "XOF",
+      value: product.price * requestedQuantity,
+      items: [{
+        item_id: String(product.id),
+        item_name: product.name,
+        item_category: product.category,
+        price: product.price,
+        quantity: requestedQuantity,
+      }],
+    });
     setCartItems((current) => {
       const existing = current.find((item) => String(item.id) === String(product.id));
       if (!existing) return [...current, { ...product, quantity: requestedQuantity }];

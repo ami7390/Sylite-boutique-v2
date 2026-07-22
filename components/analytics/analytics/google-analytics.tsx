@@ -64,7 +64,7 @@ export function GoogleAnalytics() {
 
 export function trackAnalyticsEvent(
   eventName: string,
-  parameters: Record<string, unknown> = {},
+  parameters: Record<string, string | number | boolean | undefined> = {},
 ) {
   if (typeof window === "undefined" || typeof window.gtag !== "function") return;
   window.gtag("event", eventName, parameters);

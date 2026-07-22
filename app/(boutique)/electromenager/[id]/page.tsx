@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image'; 
 import { AlertTriangle, Heart, Minus, Plus, ShieldCheck, ShoppingCart, Truck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { trackAnalyticsEvent } from '@/components/analytics/google-analytics';
 
 // IMPORTATION : On se connecte à notre boîte à outils panier
 import { useCart } from '../../context/cartcontext';
@@ -171,6 +172,15 @@ export default function FicheProduitPage() {
     return applianceCatalog.find(p => p.id === productId);
   }, [productId]);
 
+  useEffect(() => {
+    if (!product) return;
+    trackAnalyticsEvent("view_item", {
+      currency: "XOF",
+      value: product.price,
+      items: [{ item_id: String(product.id), item_name: product.name, item_category: product.category, price: product.price, quantity: 1 }],
+    });
+  }, [product]);
+
   if (!product) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-neutral-50 p-4 text-center">
@@ -187,7 +197,9 @@ export default function FicheProduitPage() {
       id: product.id,
       name: product.name,
       price: product.price,
-      quantity: quantity
+      quantity: quantity,
+      image: product.image,
+      category: product.category,
     });
   };
 

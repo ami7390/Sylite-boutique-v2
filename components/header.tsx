@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { createWhatsAppUrl } from '@/lib/store-config';
+import { trackAnalyticsEvent } from '@/components/analytics/google-analytics';
 
 // IMPORTATION : On écoute les données de notre panier global
 import { useCart } from '../app/(boutique)/context/cartcontext';
@@ -32,6 +33,7 @@ export default function Header() {
     event.preventDefault();
     const query = searchQuery.trim();
     if (!query) return;
+    trackAnalyticsEvent("search", { search_term: query });
     setIsOpen(false);
     router.push(`/collection?search=${encodeURIComponent(query)}`);
   };
@@ -56,7 +58,51 @@ export default function Header() {
     textCommande += `\n➡ *Montant Total : ${totalGlobal.toLocaleString()} FCFA*`;
     textCommande += "\n\nMerci de me confirmer la disponibilité et les modalités de livraison !";
 
+    trackAnalyticsEvent("begin_checkout", {
+      currency: "XOF",
+      value: totalGlobal,
+      checkout_method: "whatsapp",
+      items: cartItems.map((item) => ({
+        item_id: String(item.id),
+        item_name: item.name,
+        item_category: item.category,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+    });
+
     window.open(createWhatsAppUrl(textCommande), '_blank', 'noopener,noreferrer');
+  };
+
+  const handleOpenCart = () => {
+    setIsCartOpen(true);
+    if (cartItems.length === 0) return;
+    trackAnalyticsEvent("view_cart", {
+      currency: "XOF",
+      value: cartTotal,
+      items: cartItems.map((item) => ({
+        item_id: String(item.id),
+        item_name: item.name,
+        item_category: item.category,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+    });
+  };
+
+  const handleRemoveFromCart = (item: (typeof cartItems)[number]) => {
+    trackAnalyticsEvent("remove_from_cart", {
+      currency: "XOF",
+      value: item.price * item.quantity,
+      items: [{
+        item_id: String(item.id),
+        item_name: item.name,
+        item_category: item.category,
+        price: item.price,
+        quantity: item.quantity,
+      }],
+    });
+    removeFromCart(item.id);
   };
 
   // Liste centralisée des onglets pour automatiser l'activation des styles
@@ -132,7 +178,7 @@ export default function Header() {
               type="button"
               variant="ghost"
               size="icon"
-              onClick={() => setIsCartOpen(true)}
+              onClick={handleOpenCart}
               className="relative text-neutral-600"
               aria-label="Panier"
             >
@@ -156,7 +202,7 @@ export default function Header() {
               type="button"
               variant="ghost"
               size="icon"
-              onClick={() => setIsCartOpen(true)}
+              onClick={handleOpenCart}
               className="relative text-neutral-600"
               aria-label="Panier"
             >
@@ -247,7 +293,7 @@ export default function Header() {
                         {(item.size || item.color) && <p className="mt-1 text-[11px] text-neutral-500">{[item.size, item.color].filter(Boolean).join(" • ")}</p>}
                         </div>
                       </div>
-                      <button type="button" onClick={() => removeFromCart(item.id)} aria-label={`Supprimer ${item.name}`} className="rounded-lg p-2 text-neutral-400 hover:bg-red-50 hover:text-red-600"><Trash2 className="size-4" /></button>
+                      <button type="button" onClick={() => handleRemoveFromCart(item)} aria-label={`Supprimer ${item.name}`} className="rounded-lg p-2 text-neutral-400 hover:bg-red-50 hover:text-red-600"><Trash2 className="size-4" /></button>
                     </div>
                     <div className="mt-4 inline-flex items-center rounded-full border border-neutral-200">
                       <button type="button" onClick={() => updateQuantity(item.id, item.quantity - 1)} aria-label="Diminuer la quantité" className="p-2 hover:text-purple-600"><Minus className="size-3.5" /></button>

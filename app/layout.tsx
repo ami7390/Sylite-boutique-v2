@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css"; // On garde impérativement les styles Tailwind globaux ici
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://sylite-boutique.vercel.app"),
@@ -25,7 +22,7 @@ export default function RootLayout({
         Le layout racine ne contient PLUS NI Header, NI Footer, NI CartProvider.
         Il se contente d'ouvrir les portes du site avec les balises de base.
       */}
-      <body className={`${inter.className} min-h-full flex flex-col bg-neutral-950 antialiased`}>
+      <body className="min-h-full flex flex-col bg-neutral-950 font-sans antialiased">
         
         {children} {/* C'est ici que s'injectera soit la boutique, soit la maintenance */}
         <GoogleAnalytics />
