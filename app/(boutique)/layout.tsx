@@ -7,7 +7,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
-  title: "Mode, soins et maison à Bamako",
+  title: "SyLite Boutique | Mode, soins et maison à Bamako",
   description: "Découvrez les collections SyLite et commandez avec un accompagnement personnalisé sur WhatsApp.",
 };
 

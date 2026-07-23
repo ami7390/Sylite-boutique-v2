@@ -4,7 +4,7 @@ import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://sylite-boutique.vercel.app"),
-  title: { default: "SyLite — Mode, soins et maison à Bamako", template: "%s | SyLite" },
+  title: { default: "SyLite", template: "%s | SyLite" },
   description: "Découvrez la sélection SyLite : mode féminine, soins, bien-être et électroménager. Commande accompagnée sur WhatsApp et livraison à Bamako.",
   openGraph: { title: "SyLite — Votre style, votre signature", description: "Mode, soins et maison sélectionnés avec soin à Bamako.", type: "website", locale: "fr_FR", siteName: "SyLite" },
   twitter: { card: "summary_large_image", title: "SyLite", description: "Mode, soins et maison à Bamako." },
