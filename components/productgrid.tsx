@@ -29,8 +29,13 @@ export default function ProductGrid({ filterCategory }: ProductGridProps) {
   }, [filterCategory]);
 
   useEffect(() => {
-    void loadProducts();
-    return subscribeToProductChanges(() => void loadProducts());
+    const timer = window.setTimeout(() => void loadProducts(), 0);
+    const unsubscribe = subscribeToProductChanges(() => void loadProducts());
+
+    return () => {
+      window.clearTimeout(timer);
+      unsubscribe();
+    };
   }, [loadProducts]);
 
   if (loading) return <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }).map((_, index) => <Skeleton key={index} className="h-[430px]" />)}</div>;

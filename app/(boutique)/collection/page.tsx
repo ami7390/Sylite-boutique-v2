@@ -74,8 +74,11 @@ export default function CollectionPage() {
 
   // Éviter les soucis d'hydratation SSR/CSR
   useEffect(() => {
-    setIsMounted(true);
-    setSearchQuery(new URLSearchParams(window.location.search).get("search")?.trim() || "");
+    const timer = window.setTimeout(() => {
+      setIsMounted(true);
+      setSearchQuery(new URLSearchParams(window.location.search).get("search")?.trim() || "");
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   // =========================================================================
@@ -100,8 +103,12 @@ export default function CollectionPage() {
   }, []);
 
   useEffect(() => {
-    void fetchDbProducts();
-    return subscribeToProductChanges(() => void fetchDbProducts());
+    const timer = window.setTimeout(() => void fetchDbProducts(), 0);
+    const unsubscribe = subscribeToProductChanges(() => void fetchDbProducts());
+    return () => {
+      window.clearTimeout(timer);
+      unsubscribe();
+    };
   }, [fetchDbProducts]);
 
   // Fonction de nettoyage des catégories stabilisée avec useCallback

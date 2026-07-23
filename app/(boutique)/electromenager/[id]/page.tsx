@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image'; 
 import { AlertTriangle, Heart, Minus, Plus, ShieldCheck, ShoppingCart, Truck } from 'lucide-react';
@@ -168,9 +168,7 @@ export default function FicheProduitPage() {
     },
   ];
 
-  const product = useMemo(() => {
-    return applianceCatalog.find(p => p.id === productId);
-  }, [productId]);
+  const product = applianceCatalog.find(p => p.id === productId);
 
   useEffect(() => {
     if (!product) return;

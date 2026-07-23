@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { Tables } from "@/types/supabase";
 
 interface ProductRow {
   id: number | string;
@@ -38,6 +39,37 @@ interface ProductGridProps {
   whatsappNumber: string;
 }
 
+type DatabaseProductRow = Tables<"products">;
+
+const CATEGORY_CORRECTIONS: Record<string, string> = {
+  gaine: "Gaines",
+  gaines: "Gaines",
+  "soin et meditation": "Soin et méditation",
+  "soin et méditation": "Soin et méditation",
+  "soins et méditation": "Soin et méditation",
+  meditation: "Soin et méditation",
+  méditation: "Soin et méditation",
+  electromenager: "Électroménager",
+  électroménager: "Électroménager",
+  electroménager: "Électroménager",
+  électromenager: "Électroménager",
+};
+
+function normalizeDatabaseProduct(product: DatabaseProductRow): ProductRow {
+  return {
+    id: product.id,
+    name: product.name || "Article SyLite",
+    price: product.price ?? 0,
+    category: product.category || "Collection",
+    image_url: product.image_url,
+    image: product.image,
+    badge: product.badge,
+    tag: product.tag,
+    in_stock: product.in_stock,
+    created_at: product.created_at,
+  };
+}
+
 export default function NouvelArrivagePage() {
   const WHATSAPP_NUMBER = "22394939380";
   
@@ -46,35 +78,15 @@ export default function NouvelArrivagePage() {
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  // Sécurité d'hydratation
-  const [mounted, setMounted] = useState(false);
-
-  // Dictionnaire de nettoyage et de fusion centralisé des doublons
-  const categoryCorrections: { [key: string]: string } = {
-    "gaine": "Gaines",
-    "gaines": "Gaines",
-    "soin et meditation": "Soin et méditation",
-    "soin et méditation": "Soin et méditation",
-    "soins et méditation": "Soin et méditation",
-    "meditation": "Soin et méditation",
-    "méditation": "Soin et méditation",
-    "electromenager": "Électroménager",
-    "électroménager": "Électroménager",
-    "electroménager": "Électroménager",
-    "électromenager": "Électroménager"
-  };
-
   useEffect(() => {
-    setMounted(true);
-
     const fetchDbProducts = async () => {
       try {
-        const { data, error } = await (supabase as any)
+        const { data, error } = await supabase
           .from("products")
           .select("*")
           .order("created_at", { ascending: false });
         if (!error && data) {
-          setDbProducts(data as ProductRow[]);
+          setDbProducts(data.map(normalizeDatabaseProduct));
         }
       } catch (err) {
         console.error("Erreur de synchro header :", err);
@@ -82,8 +94,13 @@ export default function NouvelArrivagePage() {
         setLoading(false);
       }
     };
-    void fetchDbProducts();
-    return subscribeToProductChanges(() => void fetchDbProducts());
+    const timer = window.setTimeout(() => void fetchDbProducts(), 0);
+    const unsubscribe = subscribeToProductChanges(() => void fetchDbProducts());
+
+    return () => {
+      window.clearTimeout(timer);
+      unsubscribe();
+    };
   }, [refreshKey]);
 
   const fullListForStats = dbProducts;
@@ -96,8 +113,8 @@ export default function NouvelArrivagePage() {
           .map((p) => {
             if (!p.category) return "";
             const normalizedLower = p.category.trim().toLowerCase();
-            if (categoryCorrections[normalizedLower]) {
-              return categoryCorrections[normalizedLower];
+            if (CATEGORY_CORRECTIONS[normalizedLower]) {
+              return CATEGORY_CORRECTIONS[normalizedLower];
             }
             return normalizedLower.charAt(0).toUpperCase() + normalizedLower.slice(1);
           })
@@ -113,18 +130,12 @@ export default function NouvelArrivagePage() {
     : fullListForStats.filter(p => {
         if (!p.category) return false;
         const norm = p.category.trim().toLowerCase();
-        const currentMapped = categoryCorrections[norm] || (norm.charAt(0).toUpperCase() + norm.slice(1));
+        const currentMapped = CATEGORY_CORRECTIONS[norm] || (norm.charAt(0).toUpperCase() + norm.slice(1));
         return currentMapped.toLowerCase() === selectedCategory.toLowerCase();
       }).length;
 
   const specialRequestMessage = `Bonjour SYLITE, je regarde vos nouveaux arrivages mais je recherche un article spécifique qui n'est pas listé sur la page. Pouvez-vous m'aider ?`;
   const specialRequestUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(specialRequestMessage)}`;
-
-  // CORRECTION : On ne coupe pas le rendu ici, on laisse le cycle de vie Next.js s'exécuter 
-  // et on applique la condition de montage globale juste à l'affichage du JSX.
-  if (!mounted) {
-    return <div className="bg-neutral-50 min-h-screen text-center py-20 text-xs text-neutral-400">Initialisation de la boutique...</div>;
-  }
 
   return (
     <div className="bg-neutral-50 min-h-screen relative">
@@ -190,7 +201,7 @@ export default function NouvelArrivagePage() {
           refreshKey={refreshKey}
           onProductDeleted={() => setRefreshKey(prev => prev + 1)}
           showAdminActions={false}
-          categoryCorrections={categoryCorrections}
+          categoryCorrections={CATEGORY_CORRECTIONS}
           whatsappNumber={WHATSAPP_NUMBER}
         />
       </main>
@@ -226,7 +237,7 @@ export default function NouvelArrivagePage() {
           {limitedStockProducts.map((product, index) => {
             const displayPrice = String(product.price).includes("FCFA") ? product.price : `${product.price} FCFA`;
             const rawCat = product.category || "";
-            const cleanCat = categoryCorrections[rawCat.trim().toLowerCase()] || (rawCat.trim().charAt(0).toUpperCase() + rawCat.trim().slice(1).toLowerCase());
+            const cleanCat = CATEGORY_CORRECTIONS[rawCat.trim().toLowerCase()] || (rawCat.trim().charAt(0).toUpperCase() + rawCat.trim().slice(1).toLowerCase());
             
             // Sécurité image manquante pour éviter le crash de l'élément Image de Next.js
             const finalImageSrc = product.image_url || product.image || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600";
@@ -262,14 +273,15 @@ function ProductGridWithProps({ filterCategory, refreshKey, onProductDeleted, sh
     const loadAllProducts = async () => {
       setLoading(true);
       try {
-        const { data: supabaseProducts, error } = await (supabase as any)
+        const { data: supabaseProducts, error } = await supabase
           .from('products')
           .select('*')
           .order('created_at', { ascending: false });
 
         if (error) throw error;
         
-        const dbItemsWithPrefix: DisplayProduct[] = ((supabaseProducts || []) as ProductRow[]).map((p, i) => {
+        const dbItemsWithPrefix: DisplayProduct[] = (supabaseProducts || []).map((row, i) => {
+          const p = normalizeDatabaseProduct(row);
           const norm = (p.category || "").trim().toLowerCase();
           const corrected = categoryCorrections[norm] || (norm.charAt(0).toUpperCase() + norm.slice(1));
           return { 
@@ -296,15 +308,20 @@ function ProductGridWithProps({ filterCategory, refreshKey, onProductDeleted, sh
       }
     };
 
-    void loadAllProducts();
-    return subscribeToProductChanges(() => void loadAllProducts());
-  }, [filterCategory, refreshKey]);
+    const timer = window.setTimeout(() => void loadAllProducts(), 0);
+    const unsubscribe = subscribeToProductChanges(() => void loadAllProducts());
+
+    return () => {
+      window.clearTimeout(timer);
+      unsubscribe();
+    };
+  }, [categoryCorrections, filterCategory, refreshKey]);
 
   const handleDelete = async (productId: number | string, productName: string) => {
     if (!confirm(`Voulez-vous vraiment supprimer définitivement "${productName}" du site ?`)) return;
 
     try {
-      const { error } = await (supabase as any).from("products").delete().eq("id", productId);
+      const { error } = await supabase.from("products").delete().eq("id", productId);
       if (error) throw error;
 
       alert("Produit supprimé !");

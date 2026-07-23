@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css"; // On garde impérativement les styles Tailwind globaux ici
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
+import { MicrosoftClarity } from "@/components/analytics/microsoft-clarity";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://sylite-boutique.vercel.app"),
@@ -26,6 +27,7 @@ export default function RootLayout({
         
         {children} {/* C'est ici que s'injectera soit la boutique, soit la maintenance */}
         <GoogleAnalytics />
+        <MicrosoftClarity />
         
       </body>
     </html>

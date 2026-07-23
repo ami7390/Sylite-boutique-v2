@@ -54,8 +54,13 @@ export default function SoinsPage() {
   }, []);
 
   useEffect(() => {
-    void fetchProducts();
-    return subscribeToProductChanges(() => void fetchProducts());
+    const timer = window.setTimeout(() => void fetchProducts(), 0);
+    const unsubscribe = subscribeToProductChanges(() => void fetchProducts());
+
+    return () => {
+      window.clearTimeout(timer);
+      unsubscribe();
+    };
   }, [fetchProducts]);
 
   const careProducts = useMemo(

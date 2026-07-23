@@ -1,6 +1,5 @@
 "use client";
 
-import Link from 'next/link';
 import { Heart } from 'lucide-react';
 
 export default function WishlistPage() {

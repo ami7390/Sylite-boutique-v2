@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChefHat, Heart, MessageCircle, Package, Plug, ShieldCheck, Sparkles, Truck, Wind, Wrench, Zap } from 'lucide-react';
@@ -112,7 +112,7 @@ export default function ElectromenagerPage() {
     { name: "Bien-être", icon: Wind }
   ];
 
-  const filteredProducts = useMemo(() => {
+  const filteredProducts = (() => {
     let result = [...applianceCatalog];
     if (selectedCategory !== "Tous") result = result.filter(p => p.category === selectedCategory);
     if (priceFilter === "under-50k") result = result.filter(p => p.price < 50000);
@@ -123,7 +123,7 @@ export default function ElectromenagerPage() {
     if (sortBy === "price-asc") result.sort((a, b) => a.price - b.price);
     else if (sortBy === "price-desc") result.sort((a, b) => b.price - a.price);
     return result;
-  }, [selectedCategory, priceFilter, stockFilter, sortBy]);
+  })();
 
   return (
     <div className="bg-neutral-50/60 min-h-screen text-xs selection:bg-purple-500 selection:text-white">
@@ -190,7 +190,7 @@ export default function ElectromenagerPage() {
               <div className="space-y-2 text-neutral-600 font-medium">
                 <label className="flex items-center gap-2.5 cursor-pointer"><input type="radio" name="price" checked={priceFilter === "Tous"} onChange={() => setPriceFilter("Tous")} className="accent-purple-600" /><span>Tous les prix</span></label>
                 <label className="flex items-center gap-2.5 cursor-pointer"><input type="radio" name="price" checked={priceFilter === "under-50k"} onChange={() => setPriceFilter("under-50k")} className="accent-purple-600" /><span>Moins de 50.000 FCFA</span></label>
-                <label className="flex items-center gap-2.5 cursor-pointer"><input type="radio" name="price" checked={priceFilter === "5k-150k"} onChange={() => setPriceFilter("5k-150k")} className="accent-purple-600" /><span>50.000 - 150.000 FCFA</span></label>
+                <label className="flex items-center gap-2.5 cursor-pointer"><input type="radio" name="price" checked={priceFilter === "50k-150k"} onChange={() => setPriceFilter("50k-150k")} className="accent-purple-600" /><span>50.000 - 150.000 FCFA</span></label>
                 <label className="flex items-center gap-2.5 cursor-pointer"><input type="radio" name="price" checked={priceFilter === "over-150k"} onChange={() => setPriceFilter("over-150k")} className="accent-purple-600" /><span>Plus de 150.000 FCFA</span></label>
               </div>
             </div>

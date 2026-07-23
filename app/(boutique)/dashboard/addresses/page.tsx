@@ -13,10 +13,18 @@ export default function AddressesPage() {
 
   // 2. Étape magique : On charge l'adresse sauvegardée au démarrage de la page
   useEffect(() => {
-    const savedAddress = localStorage.getItem('sylite_user_address');
-    if (savedAddress) {
-      setAddress(JSON.parse(savedAddress));
-    }
+    const timer = window.setTimeout(() => {
+      const savedAddress = localStorage.getItem('sylite_user_address');
+      if (!savedAddress) return;
+
+      try {
+        setAddress(JSON.parse(savedAddress));
+      } catch {
+        localStorage.removeItem('sylite_user_address');
+      }
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   // 3. Fonction pour sauvegarder les modifications dans le navigateur

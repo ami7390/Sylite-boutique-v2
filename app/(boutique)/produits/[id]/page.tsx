@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -22,16 +22,19 @@ export default function ProductPage() {
   const [error, setError] = useState("");
   const [quantity, setQuantity] = useState(1);
 
-  const loadProduct = async () => {
+  const loadProduct = useCallback(async () => {
     setLoading(true);
     setError("");
     const { data, error: requestError } = await supabase.from("products").select("*").eq("id", id).single();
     if (requestError || !data) setError("Ce produit est introuvable ou momentanément indisponible.");
     else setProduct(normalizeProduct(data as ProductRow));
     setLoading(false);
-  };
+  }, [id]);
 
-  useEffect(() => { void loadProduct(); }, [id]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => void loadProduct(), 0);
+    return () => window.clearTimeout(timer);
+  }, [loadProduct]);
 
   useEffect(() => {
     if (!product) return;

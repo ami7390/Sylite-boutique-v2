@@ -217,7 +217,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 z-10">
               <h3 className="text-xl font-bold text-white font-serif">Ensembles & Robes Chic</h3>
               <p className="text-xs text-neutral-200 mt-1 font-light">Des coupes fluides et raffinées pour toutes vos occasions.</p>
-              <a href="/nouvel-arrivage" className="text-xs text-purple-300 font-bold mt-4 inline-flex items-center gap-1 group-hover:text-purple-400 transition-colors">Explorer l'univers →</a>
+              <Link href="/nouvel-arrivage" className="text-xs text-purple-300 font-bold mt-4 inline-flex items-center gap-1 group-hover:text-purple-400 transition-colors">Explorer l'univers →</Link>
             </div>
           </div>
 
@@ -226,7 +226,7 @@ export default function Home() {
             <Image src="/nusette.jpg" alt="Lingerie" layout="fill" objectFit="cover" className="brightness-75 group-hover:scale-102 transition-transform duration-500" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5 z-10">
               <h3 className="text-base font-bold text-white font-serif">Lingerie & Nuisettes</h3>
-              <a href="/nouvel-arrivage" className="text-xs text-purple-300 font-bold mt-1 inline-block">Voir les pièces →</a>
+              <Link href="/nouvel-arrivage" className="text-xs text-purple-300 font-bold mt-1 inline-block">Voir les pièces →</Link>
             </div>
           </div>
 
@@ -235,7 +235,7 @@ export default function Home() {
             <Image src="/gaine-ceinture-7000.jpg" alt="Gaines" layout="fill" objectFit="cover" className="brightness-75 group-hover:scale-102 transition-transform duration-500" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-4 z-10">
               <h3 className="text-sm font-bold text-white font-serif">Gaines & Invisible</h3>
-              <a href="/nouvel-arrivage" className="text-xs text-purple-300 font-bold mt-1 inline-block">Découvrir →</a>
+              <Link href="/nouvel-arrivage" className="text-xs text-purple-300 font-bold mt-1 inline-block">Découvrir →</Link>
             </div>
           </div>
 
@@ -244,7 +244,7 @@ export default function Home() {
             <Image src="/diffuseur.png" alt="Bien être" layout="fill" objectFit="cover" className="brightness-75 group-hover:scale-102 transition-transform duration-500" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-4 z-10">
               <h3 className="text-sm font-bold text-white font-serif">Soin & Diffuseurs</h3>
-              <a href="/nouvel-arrivage" className="text-xs text-purple-300 font-bold mt-1 inline-block">S'équiper →</a>
+              <Link href="/nouvel-arrivage" className="text-xs text-purple-300 font-bold mt-1 inline-block">S'équiper →</Link>
             </div>
           </div>
         </div>
@@ -529,24 +529,24 @@ export default function Home() {
               <h3 className="text-xs uppercase font-semibold text-neutral-400 tracking-wider mb-3">Nos piliers d'innovation :</h3>
               <div className="flex flex-wrap gap-2">
                 {["Design Minimaliste", "Économie d'Énergie", "Appareils Connectés", "Gain de Temps Éprouvé", "Performance Silencieuse"].map((keyword, i) => (
-                  <a 
+                  <Link 
                     key={i} 
                     href="/electromenager" 
                     className="text-[11px] bg-neutral-900 border border-neutral-800 px-3 py-1 rounded-md text-neutral-400 hover:border-purple-900/50 hover:text-purple-300 transition-colors duration-200"
                   >
                     {keyword}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
 
             <div className="pt-2">
-              <a 
+              <Link 
                 href="/electromenager" 
                 className="inline-flex items-center gap-2 px-6 py-3.5 text-xs font-bold tracking-wider text-white uppercase rounded-xl bg-purple-600 hover:bg-purple-500 shadow-md shadow-purple-900/20 transition-all duration-300 transform hover:-translate-y-0.5"
               >
                 Découvrir la Gamme
-              </a>
+              </Link>
             </div>
           </div>
         </div>

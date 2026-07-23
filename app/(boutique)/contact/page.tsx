@@ -19,13 +19,12 @@ export default function ContactPage() {
 
   // Calcul du statut d'ouverture en temps réel (8h - 19h)
   useEffect(() => {
-    const currentHour = new Date().getHours();
-    const currentDay = new Date().getDay(); // 0 = Dimanche
-    if (currentHour >= 8 && currentHour < 19 && currentDay !== 0) {
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-    }
+    const timer = window.setTimeout(() => {
+      const currentHour = new Date().getHours();
+      const currentDay = new Date().getDay(); // 0 = Dimanche
+      setIsOpen(currentHour >= 8 && currentHour < 19 && currentDay !== 0);
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   const handleWhatsAppSubmit = (e: React.FormEvent) => {

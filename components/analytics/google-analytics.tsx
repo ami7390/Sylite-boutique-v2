@@ -66,6 +66,16 @@ export function trackAnalyticsEvent(
   eventName: string,
   parameters: Record<string, unknown> = {},
 ) {
-  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
-  window.gtag("event", eventName, parameters);
+  if (
+    !measurementId ||
+    typeof window === "undefined" ||
+    typeof window.gtag !== "function"
+  ) {
+    return;
+  }
+
+  window.gtag("event", eventName, {
+    ...parameters,
+    send_to: measurementId,
+  });
 }

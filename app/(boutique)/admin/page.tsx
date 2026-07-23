@@ -30,6 +30,10 @@ interface CustomerMessage {
   created_at: string;
 }
 
+function getErrorMessage(error: unknown, fallback: string) {
+  return error instanceof Error ? error.message : fallback;
+}
+
 export default function AdminDashboardPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
@@ -110,8 +114,8 @@ export default function AdminDashboardPage() {
       setIsAuthenticated(true);
       loadProducts();
       loadMessages();
-    } catch (err: any) {
-      alert(`Erreur : ${err.message || "Identifiants invalides."}`);
+    } catch (err: unknown) {
+      alert(`Erreur : ${getErrorMessage(err, "Identifiants invalides.")}`);
     } finally {
       setAuthLoading(false);
     }
@@ -187,8 +191,8 @@ export default function AdminDashboardPage() {
       cancelEdit();
       await loadProducts();
       notifyProductsChanged();
-    } catch (err: any) {
-      alert(`Erreur lors de l'enregistrement : ${err.message}`);
+    } catch (err: unknown) {
+      alert(`Erreur lors de l'enregistrement : ${getErrorMessage(err, "Une erreur inattendue est survenue.")}`);
     } finally {
       setIsSubmitting(false);
     }
